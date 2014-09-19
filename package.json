@@ -1,0 +1,24 @@
+{
+  "name": "languagedepot-statistics",
+  "version": "0.1.0",
+  "description": "API and client UI for LanguageDepot statistics",
+  "main": "src/index.php",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sillsdev/web-languagedepot-stats.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "gulp-util": "~2.2.14",
+    "gulp": "~3.8",
+    "gulp-livereload": "~1.2.0",
+    "tiny-lr": "0.0.5",
+    "async": "~0.9.0",
+    "lodash.template": "^2.4.1",
+    "gulp-rename": "~1.2.0"
+  }
+}
