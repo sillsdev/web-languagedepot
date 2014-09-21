@@ -57,7 +57,7 @@ var start_server = function(options, cb) {
 };
 
 var paths = {
-  src: ['htdocs/**/*.inc', 'htdocs/**/*.php', '!htdocs/vendor/**'],
+  src_js: ['src/app-ng/**/*.js'],
   test: ['tests/e2e/**/*.js']
 };
 
@@ -65,9 +65,6 @@ var paths = {
 var livereload = require('gulp-livereload');
 var lr = require('tiny-lr');
 var server = lr();
-
-var srcTheme = [
-];
 
 gulp.task('default', function() {
   // place code for your default task here
@@ -82,7 +79,7 @@ gulp.task('reload', function() {
     if (err) {
       return console.log(err);
     }
-    gulp.watch(srcTheme, [ 'do-reload' ]);
+    gulp.watch(paths.src_js, [ 'do-reload' ]);
   });
 });
 

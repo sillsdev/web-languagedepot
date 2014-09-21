@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<title>{% block title 'Default Title' %}</title>
+	<link rel="stylesheet" href="vendor/twbs/bootstrap/dist/css/bootstrap.css" />
+	<link rel="stylesheet" href="vendor/twbs/bootstrap/dist/css/bootstrap-theme.css" />
+	<link rel="stylesheet" href="vendor/fortawesome/font-awesome/css/font-awesome.css">
+</head>
+<body data-ng-app="{{app}}">
+{% block body %}
+Default Body
+{% endblock body %}
+	<script src="vendor_bower/angular/angular.js"></script>
+	<script src="vendor_bower/angular-route/angular-route.js"></script>
+	<script src="vendor_bower/angular-resource/angular-resource.js"></script>
+	<script src="vendor_bower/angular-ui-bootstrap-bower/ui-bootstrap-tpls.js"></script>
+	<!--  Add other scripts in here via block  -->
+{% block app_scripts %}
+{% endblock app_scripts %}
+
+</body>
+</html>

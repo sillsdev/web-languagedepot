@@ -10,5 +10,10 @@
     "phpunit/phpunit": "4.2.*",
     "twbs/bootstrap": "3.*",
     "fortawesome/font-awesome": "4.*"
+  },
+  "autoload": {
+    "psr-4": {
+      "App\\": ""
+    }
   }
 }

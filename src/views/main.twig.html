@@ -1,0 +1,18 @@
+{% extends 'layout.twig.html' %}
+
+{% block title 'My SayGoWeb' %}
+
+{% block body %}
+	<div class="navbar">
+	  <div class="navbar-inner">
+	  	<img class="pull-left" style="width:auto;height:40px;margin-right:8px;" src="/assets/logo.png" />
+	    <a class="brand" href="#">SayGoWeb</a>
+	    <ul class="nav">
+	      <li class="active"><a href="#/clients">Clients</a></li>
+	      <li><a href="#/invoices">Invoices</a></li>
+	    </ul>
+	  </div>
+	</div>
+	<div class="container" data-ng-view>
+	</div>
+{% endblock body %}
