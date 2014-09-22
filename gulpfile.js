@@ -1,10 +1,13 @@
 var gulp = require('gulp');
 var gutil = require('gulp-util');
 var child_process = require('child_process');
-var exec2 = require('child_process').exec;
 var async = require('async');
 var template = require('lodash.template');
 var rename = require("gulp-rename");
+var less = require('gulp-less');
+var uglify = require('gulp-uglify');
+var concat = require('gulp-concat');
+var sourcemaps = require('gulp-sourcemaps');
 
 var execute = function(command, options, callback) {
   if (options == undefined) {
@@ -15,7 +18,7 @@ var execute = function(command, options, callback) {
     gutil.log(gutil.colors.green(command));
   }
   if (!options.dryRun) {
-    exec2(command, function(err, stdout, stderr) {
+    child_process.exec(command, function(err, stdout, stderr) {
       gutil.log(stdout);
       gutil.log(gutil.colors.yellow(stderr));
       callback(err);
@@ -57,7 +60,8 @@ var start_server = function(options, cb) {
 };
 
 var paths = {
-  src_js: ['src/app-ng/**/*.js'],
+  src_ng: ['src/app-ng/**/*.js', 'src/app-ng/**/*.html', 'src/assets/*'],
+  src_less: ['src/app-ng/**/*.less'],
   test: ['tests/e2e/**/*.js']
 };
 
@@ -79,8 +83,18 @@ gulp.task('reload', function() {
     if (err) {
       return console.log(err);
     }
-    gulp.watch(paths.src_js, [ 'do-reload' ]);
+    gulp.watch(paths.src_ng, [ 'do-reload' ]);
   });
+});
+
+gulp.task('less', function() {
+  gulp.src(paths.src_less)
+    .pipe(sourcemaps.init())
+    .pipe(less())
+    .pipe(concat('site.css'))
+    .pipe(sourcemaps.write())
+    .pipe(gulp.dest('src/assets')
+  );
 });
 
 gulp.task('upload', function(cb) {
