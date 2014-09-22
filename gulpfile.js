@@ -84,6 +84,7 @@ gulp.task('reload', function() {
       return console.log(err);
     }
     gulp.watch(paths.src_ng, [ 'do-reload' ]);
+    gulp.watch(paths.src_less, [ 'less' ]);
   });
 });
 

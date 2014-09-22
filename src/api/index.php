@@ -17,6 +17,45 @@ $app->register(new ActiveRecordServiceProvider(), array(
     'ActiveRecord.defaultConnection' => 'public'
 ));
 
+$app->get('/project/private', function ()
+{
+    Project::$connection = 'private';
+    $projects = Project::all();
+    $results = array();
+    $fail = array();
+    foreach ($projects as $project) {
+        $asArray = $project->to_array(array(
+            'only' => array(
+                'id',
+                'identifier',
+                'created_on',
+                'name'
+            )
+        ));
+        $asArray['name'] = utf8_encode($asArray['name']);
+        $canEncode = json_encode($asArray);
+        if ($canEncode === false) {
+            // $fail[] = $asArray;
+            throw new \Exception("Cannot encode to json");
+        } else {
+            $results[] = $asArray;
+        }
+    }
+    // var_dump($fail);
+    return json_encode($results);
+});
+$app->get('/project/private/{id}', function ($id) use ($app)
+{
+    Project::$connection = 'private';
+    $project = Project::find($id);
+    $asArray = $project->to_array();
+    $canEncode = json_encode($asArray);
+    if ($canEncode === false) {
+        throw new \Exception("Cannot encode to json");
+    }
+    //     var_dump($asArray);
+    return json_encode($asArray);
+});
 $app->get('/project', function ()
 {
     $projects = Project::all();
@@ -51,7 +90,7 @@ $app->get('/project/{id}', function ($id) use ($app)
     if ($canEncode === false) {
         throw new \Exception("Cannot encode to json");
     }
-//     var_dump($asArray);
+    //     var_dump($asArray);
     return json_encode($asArray);
 });
 
