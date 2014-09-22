@@ -5,9 +5,9 @@ angular.module('sa.projects', [
   ])
   .controller('ProjectsCtrl', [ '$scope', 'ProjectService', function($scope, ProjectService) {
 
-    var margin = {top: 20, right: 20, bottom: 30, left: 40},
-    width = 960 - margin.left - margin.right,
-    height = 500 - margin.top - margin.bottom;
+    var margin = {top: 20, right: 40, bottom: 20, left: 40},
+    width =  750 - margin.left - margin.right,
+    height = 300 - margin.top - margin.bottom;
 
     var parseDate = d3.time.format("%Y-%m-%dT%H:%M:%S%Z").parse;
 
