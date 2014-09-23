@@ -7,29 +7,6 @@ angular.module('sa.projects', [
 
   }])
   .controller('PieCtrl', [ '$scope', 'PublicProjectService', function($scope, PublicProjectService) {
-
-    var margin = {top: 20, right: 40, bottom: 20, left: 40},
-    width =  750 - margin.left - margin.right,
-    height = 300 - margin.top - margin.bottom,
-    radius = Math.min(width, height) / 2;
-
-    var color = d3.scale.ordinal()
-    .range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"]);
-
-    var arc = d3.svg.arc()
-        .outerRadius(radius - 10)
-        .innerRadius(0);
-
-    var pie = d3.layout.pie()
-        .sort(null)
-        .value(function(d) { return d.value; });
-
-    var chart = d3.select(".chartPie")
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom)
-      .append("g")
-        .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
-
     var projects = PublicProjectService.query(function() {
       var temp = {};
       projects.forEach(function(d) {
@@ -45,30 +22,21 @@ angular.module('sa.projects', [
         data.push({type: key, value: temp[key]});
       }
 
-      console.log(data);
+//      console.log(data);
 
-      var g = chart.selectAll(".arc")
-          .data(pie(data))
-        .enter().append("g")
-          .attr("class", "arc");
+      nv.addGraph(function() {
+        var chart = nv.models.pieChart().x(function(d) {
+          return d.type;
+        }).y(function(d) {
+          return d.value
+        }).showLabels(true);
 
-      g.append("path")
-          .attr("d", arc)
-          .style("fill", function(d) { return color(d.data.type); });
+        d3.select(".chartPie").datum(data).transition().duration(1200).call(chart);
 
-      g.append("text")
-          .attr("transform", function(d) { return "translate(" + arc.centroid(d) + ")"; })
-          .attr("dy", ".35em")
-          .style("text-anchor", "middle")
-          .text(function(d) { return d.data.type; });
-
+        return chart;
+      });
 
     });
-
-    function type(d) {
-      d.value = +d.value; // coerce to number
-      return d;
-    }
 
   }])
   .controller('PublicProjectsCtrl', [ '$scope', 'PublicProjectService', function($scope, PublicProjectService) {
@@ -96,20 +64,51 @@ angular.module('sa.projects', [
     var line = d3.svg.line()
         .x(function(d) { return x(d.created_on); })
         .y(function(d) { return y(d.total); });
-
+/*
     var chart = d3.select(".chartPublic")
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
       .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-    $scope.projects = PublicProjectService.query(function() {
+*/
+    var data = PublicProjectService.query(function() {
       var sum = 0;
-      $scope.projects.forEach(function(d) {
-//        console.log(d);
+      data.forEach(function(d) {
         d.created_on = parseDate(d.created_on);
         d.total = sum++;
-      })
+      });
+      console.log(data);
+      
+      nv.addGraph(function() {
+	  var chart = nv.models.lineChart();
+	  chart.x(function(d) {
+	    return d.created_on;
+	  });
+	  chart.y(function(d) {
+	    return d.total;
+	  });
+
+	  chart.xAxis
+	    .tickFormat(d3.format(',f'));
+
+	  chart.yAxis
+	    .tickFormat(d3.format(',f'));
+
+//	  chart.y2Axis
+//	    .tickFormat(d3.format(',f'));
+
+	  d3.select('.chartPublic')
+	    .datum(data)
+	    .transition().duration(500)
+	    .call(chart)
+	    ;
+
+	  nv.utils.windowResize(chart.update);
+
+	  return chart;
+	});
+
+/*      
       x.domain(d3.extent($scope.projects, function(d) { return d.created_on; }));
       y.domain(d3.extent($scope.projects, function(d) { return d.total; }));
 
@@ -132,6 +131,7 @@ angular.module('sa.projects', [
         .datum($scope.projects)
         .attr("class", "line")
         .attr("d", line);
+*/
     });
 
     function type(d) {
