@@ -33,6 +33,7 @@ $app->get('/project/private', function ()
             )
         ));
         $asArray['name'] = utf8_encode($asArray['name']);
+        $asArray['type'] = $project->type();
         $canEncode = json_encode($asArray);
         if ($canEncode === false) {
             // $fail[] = $asArray;
@@ -71,6 +72,7 @@ $app->get('/project', function ()
             )
         ));
         $asArray['name'] = utf8_encode($asArray['name']);
+        $asArray['type'] = $project->type();
         $canEncode = json_encode($asArray);
         if ($canEncode === false) {
             // $fail[] = $asArray;

@@ -6,6 +6,71 @@ angular.module('sa.projects', [
   .controller('ProjectsCtrl', [ '$scope', function($scope) {
 
   }])
+  .controller('PieCtrl', [ '$scope', 'PublicProjectService', function($scope, PublicProjectService) {
+
+    var margin = {top: 20, right: 40, bottom: 20, left: 40},
+    width =  750 - margin.left - margin.right,
+    height = 300 - margin.top - margin.bottom,
+    radius = Math.min(width, height) / 2;
+
+    var color = d3.scale.ordinal()
+    .range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"]);
+
+    var arc = d3.svg.arc()
+        .outerRadius(radius - 10)
+        .innerRadius(0);
+
+    var pie = d3.layout.pie()
+        .sort(null)
+        .value(function(d) { return d.value; });
+
+    var chart = d3.select(".chartPie")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+      .append("g")
+        .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+
+    var projects = PublicProjectService.query(function() {
+      var temp = {};
+      projects.forEach(function(d) {
+//        console.log(d);
+        if (temp[d.type] == undefined) {
+          temp[d.type] = 1;
+        } else {
+          temp[d.type]++;
+        }
+      });
+      var data = [];
+      for (var key in temp) {
+        data.push({type: key, value: temp[key]});
+      }
+
+      console.log(data);
+
+      var g = chart.selectAll(".arc")
+          .data(pie(data))
+        .enter().append("g")
+          .attr("class", "arc");
+
+      g.append("path")
+          .attr("d", arc)
+          .style("fill", function(d) { return color(d.data.type); });
+
+      g.append("text")
+          .attr("transform", function(d) { return "translate(" + arc.centroid(d) + ")"; })
+          .attr("dy", ".35em")
+          .style("text-anchor", "middle")
+          .text(function(d) { return d.data.type; });
+
+
+    });
+
+    function type(d) {
+      d.value = +d.value; // coerce to number
+      return d;
+    }
+
+  }])
   .controller('PublicProjectsCtrl', [ '$scope', 'PublicProjectService', function($scope, PublicProjectService) {
 
     var margin = {top: 20, right: 40, bottom: 20, left: 40},
