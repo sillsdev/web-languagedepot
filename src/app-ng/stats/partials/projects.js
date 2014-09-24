@@ -6,7 +6,7 @@ angular.module('sa.projects', [
   .controller('ProjectsCtrl', [ '$scope', function($scope) {
 
   }])
-  .controller('PieCtrl', [ '$scope', 'PublicProjectService', function($scope, PublicProjectService) {
+  .controller('PublicPieCtrl', [ '$scope', 'PublicProjectService', function($scope, PublicProjectService) {
     var projects = PublicProjectService.query(function() {
       var temp = {};
       projects.forEach(function(d) {
@@ -31,7 +31,7 @@ angular.module('sa.projects', [
           return d.value
         }).showLabels(true);
 
-        d3.select(".chartPie").datum(data).transition().duration(1200).call(chart);
+        d3.select(".chartPublicPie").datum(data).transition().duration(1200).call(chart);
 
         nv.utils.windowResize(chart.update);
 
@@ -79,6 +79,41 @@ angular.module('sa.projects', [
           .datum(graphData)
           .transition().duration(500)
           .call(chart);
+
+        nv.utils.windowResize(chart.update);
+
+        return chart;
+      });
+
+    });
+
+  }])
+  .controller('PrivatePieCtrl', [ '$scope', 'PrivateProjectService', function($scope, PrivateProjectService) {
+    var projects = PrivateProjectService.query(function() {
+      var temp = {};
+      projects.forEach(function(d) {
+//        console.log(d);
+        if (temp[d.type] == undefined) {
+          temp[d.type] = 1;
+        } else {
+          temp[d.type]++;
+        }
+      });
+      var data = [];
+      for (var key in temp) {
+        data.push({type: key, value: temp[key]});
+      }
+
+//      console.log(data);
+
+      nv.addGraph(function() {
+        var chart = nv.models.pieChart().x(function(d) {
+          return d.type;
+        }).y(function(d) {
+          return d.value
+        }).showLabels(true);
+
+        d3.select(".chartPrivatePie").datum(data).transition().duration(1200).call(chart);
 
         nv.utils.windowResize(chart.update);
 
