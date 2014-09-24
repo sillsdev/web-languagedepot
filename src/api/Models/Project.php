@@ -12,6 +12,7 @@ class Project extends \ActiveRecord\Model
     const TYPE_ONESTORY = 'onestory';
     const TYPE_TEST     = 'test';
     const TYPE_BLOOM    = 'bloom';
+    const TYPE_ADAPTIT  = 'adaptit';
 
     public function type() {
         // Type is not a first class field, so attempt to infer the type from:
@@ -33,6 +34,8 @@ class Project extends \ActiveRecord\Model
                 return self::TYPE_TEST;
             case 'bloom':
                 return self::TYPE_BLOOM;
+            case 'adapt':
+                return self::TYPE_ADAPTIT;
         }
 
         // b) Text in description
@@ -42,9 +45,11 @@ class Project extends \ActiveRecord\Model
             'dictionary' => self::TYPE_LIFT,
             'ourword' => self::TYPE_OURWORD,
             'story' => self::TYPE_ONESTORY,
+            'ose' => self::TYPE_ONESTORY,
             'translation' => self::TYPE_OURWORD,
             'test' => self::TYPE_TEST,
             'bloom' => self::TYPE_BLOOM,
+            'adapt' => self::TYPE_ADAPTIT,
         );
         foreach ($words as $word => $type) {
             if (stristr($this->description, $word) !== false) {
