@@ -3,3 +3,4 @@ src/vendor/
 src/vendor_bower/
 .externalToolBuilders/
 /src/assets/site.css
+*.pyc

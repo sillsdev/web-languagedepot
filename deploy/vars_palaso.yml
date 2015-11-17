@@ -1,0 +1,39 @@
+---
+
+# vars_palaso
+
+php_log_folder: /var/log/php
+repo_path: /home/cambell/src/xForge/web-languagedepot-api
+
+apache_site_enable:
+  - default_local.conf
+  - languagedepot_org.conf
+
+apache_vhosts:
+  - server_name: default.local
+    server_admin: webmaster@palaso.org
+    server_file_name: default_local
+    template: vhost_ssl.conf.j2
+    document_root: /var/www/virtual/default_local
+    directory_options:
+      - "+Indexes"
+      - "+FollowSymLinks"
+    directory_extra:
+      - RewriteEngine On
+    virtual_hosts:
+      - has_ssl: false
+        port: 80
+        server_alias: []
+  - server_name: admin.languagedepot.org
+    server_admin: webmaster@palaso.org
+    server_file_name: languagedepot_org
+    template: vhost_ssl.conf.j2
+    document_root: /var/www/virtual/languagedepot.org_admin/htdocs
+    link_to: "{{repo_path}}/src"
+    directory_extra:
+      - RewriteEngine On
+    virtual_hosts:
+      - has_ssl: false
+        port: 80
+        server_alias:
+          - admin.languagedepot.local

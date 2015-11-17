@@ -1,0 +1,66 @@
+---
+
+- name: Deploy development environment for admin.languagedepot.org
+  hosts: all
+  sudo: yes
+  pre_tasks:
+    - include_vars: "vars_{{ deploy }}.yml"
+  roles:
+    - fix
+    # locale_install may be needed if locale has been changed away from defaults
+    # - locale_install
+    # - ssl_config
+    - apache_config
+  tasks:
+    - name: install packages
+      apt: name="{{item}}" state=present
+      with_items:
+        - libapache2-mod-php5
+        - php5-gd
+        - php5-cli
+
+    - name: php log folder exists
+      file: path={{php_log_folder}} state=directory owner=www-data group=www-data mode=0775 recurse=yes
+
+    - name: php.ini changes
+      lineinfile:
+        dest: /etc/php5/apache2/php.ini
+        regexp: '^;?{{item.property}}'
+        line: "{{item.property}} = {{item.value}}"
+        backrefs: yes
+      with_items:
+        - property: 'memory_limit'
+          value: '256M'
+        - property: 'display_errors'
+          value: 'On'
+        - property: 'display_startup_errors'
+          value: 'On'
+        - property: 'error_log'
+          value: '{{php_log_folder}}/php_error.log'
+        - property: 'post_max_size'
+          value: '60M'
+        - property: 'upload_max_filesize'
+          value: '60M'
+      notify: Restart apache
+
+    - name: Ensure default_local folder does not exist (localhost)
+      file: path="/var/www/virtual/default_local" state=absent force=true
+      when: inventory_hostname == "localhost"
+    - name: Get local dir (localhost)
+      local_action: shell pwd
+      register: local_dir
+      when: inventory_hostname == "localhost"
+    - name: Ensure default_local link exists (localhost)
+      file: src="{{local_dir.stdout | dirname | dirname | realpath}}" dest="/var/www/virtual/default_local" state=link force=true
+      when: inventory_hostname == "localhost"
+
+    - name: add host aliases
+      lineinfile:
+        dest: /etc/hosts
+        regexp: '\s{{item}}'
+        line: "127.0.0.1    {{item}}"
+        state: present
+        create: yes
+      with_items:
+        - "default.local"
+        - "admin.languagedepot.local"

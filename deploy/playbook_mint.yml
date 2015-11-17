@@ -1,0 +1,11 @@
+---
+
+- name: Linux Mint local webserver
+  hosts: all
+  sudo: yes
+  tasks:
+
+- include: dependencies.yml
+  vars:
+    deploy: palaso
+- include: code.yml

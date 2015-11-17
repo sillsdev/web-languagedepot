@@ -1,0 +1,23 @@
+---
+
+- name: Deploy code for admin.languagedepot.org
+  hosts: all
+  sudo: no
+  tasks:
+    - name: composer install
+      command: composer install
+      args:
+        chdir: "{{item}}"
+      changed_when: false
+      when: inventory_hostname == "localhost"
+      with_items:
+        - /var/www/virtual/languagedepot.org_admin/htdocs
+
+    - name: bower install
+      command: bower install --allow-root
+      args:
+        chdir: "{{item}}"
+      changed_when: false
+      when: inventory_hostname == "localhost"
+      with_items:
+        - /var/www/virtual/languagedepot.org_admin/htdocs
