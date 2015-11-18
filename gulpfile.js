@@ -117,7 +117,7 @@ gulp.task('db-copy-1', function(cb) {
     dryRun : false,
     silent : true,
     dest : "root@public.languagedepot.org",
-    password : process.env.password,
+    password : process.env.password_db,
     user: process.env.USER
   };
   execute(
@@ -132,7 +132,7 @@ gulp.task('db-copy-2', function(cb) {
     dryRun : false,
     silent : true,
     dest : "root@public.languagedepot.org",
-    password : process.env.password,
+    password : process.env.password_db,
     user: process.env.USER
   };
   execute(
