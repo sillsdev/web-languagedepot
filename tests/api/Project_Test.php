@@ -14,7 +14,7 @@ class ProjectTest extends PHPUnit_Framework_TestCase
 		$client = TestEnvironment::client();
 
 		// List
-		$response = $client->get('/api/project/', array(
+		$response = $client->get('/api/project', array(
 			'headers' => TestEnvironment::headers()
 		));
 		$this->assertEquals('200', $response->getStatusCode());
@@ -22,11 +22,11 @@ class ProjectTest extends PHPUnit_Framework_TestCase
 		$result = json_decode($result);
 
 		$count0 = count($result);
-		$this->assertEquals(0, $count0);
+		$this->assertEquals(995, $count0);
 
 		// Add
 // 		$id = TestEnvironment::createId();
-		$response = $client->post('/api/project/', array(
+		$response = $client->post('/api/project', array(
 			'headers' => TestEnvironment::headers(),
 			'body' => array(
 				'custname' => 'custname'
@@ -42,7 +42,7 @@ class ProjectTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals($expected, $result);
 
 		// List again
-		$response = $client->get('/api/project/', array(
+		$response = $client->get('/api/project', array(
 			'headers' => TestEnvironment::headers()
 		));
 		$this->assertEquals('200', $response->getStatusCode());
@@ -53,7 +53,7 @@ class ProjectTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals($count0 + 1, $count1);
 
 		// Get by id
-		$response = $client->get('/api/project/' . $id, array(
+		$response = $client->get('/api/project' . $id, array(
 			'headers' => TestEnvironment::headers()
 		));
 		$this->assertEquals('200', $response->getStatusCode());
@@ -63,7 +63,7 @@ class ProjectTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals($expected, $result);
 
 		// Write back
-		$response = $client->put('/api/project/' . $id, array(
+		$response = $client->put('/api/project' . $id, array(
 			'headers' => TestEnvironment::headers(),
 			'body' => array(
 				'custname' => 'new custname'
@@ -75,7 +75,7 @@ class ProjectTest extends PHPUnit_Framework_TestCase
 		$result = json_decode($result);
 
 		// Get by id to read back
-		$response = $client->get('/api/project/' . $id, array(
+		$response = $client->get('/api/project' . $id, array(
 			'headers' => TestEnvironment::headers()
 		));
 		$this->assertEquals('200', $response->getStatusCode());
@@ -100,7 +100,7 @@ class ProjectTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals($id, $result[$count1 - 1]->debtor_no);
 
 		// Delete
-		$response = $client->delete('/api/project/' . $id, array(
+		$response = $client->delete('/api/project' . $id, array(
 			'headers' => TestEnvironment::headers()
 		));
 		$this->assertEquals('200', $response->getStatusCode());
@@ -108,7 +108,7 @@ class ProjectTest extends PHPUnit_Framework_TestCase
 		$result = json_decode($result);
 
 		// List again
-		$response = $client->get('/api/project/', array(
+		$response = $client->get('/api/project', array(
 			'headers' => TestEnvironment::headers()
 		));
 

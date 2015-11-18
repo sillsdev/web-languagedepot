@@ -186,7 +186,7 @@ gulp.task('test-current', function(cb) {
 });
 
 gulp.task('test', function(cb) {
-  execute('/usr/bin/env php htdocs/vendor/bin/phpunit tests/*_Test.php', null, function(err) {
+  execute('/usr/bin/env php src/vendor/bin/phpunit -c phpunit.xml', null, function(err) {
     cb(null); // Swallow the error propagation so that gulp doesn't display a nodejs backtrace.
   });
 });
