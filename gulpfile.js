@@ -62,7 +62,8 @@ var start_server = function(options, cb) {
 var paths = {
   src_ng: ['src/app-ng/**/*.js', 'src/app-ng/**/*.html', 'src/assets/*'],
   src_less: ['src/app-ng/**/*.less'],
-  test: ['tests/e2e/**/*.js']
+  src_api: ['src/api/**/*.php'],
+  test: ['tests/api/**/*.php']
 };
 
 // livereload
@@ -100,10 +101,10 @@ gulp.task('less', function() {
 
 gulp.task('upload', function(cb) {
   var options = {
-    dryRun: true,
+    dryRun: false,
     silent : false,
     src : "src",
-    dest : "root@public.languagedepot.org:/var/www/virtual/languagedepot.org_stats/htdocs/"
+    dest : "root@public.languagedepot.org:/var/www/languagedepot.org_admin/htdocs/"
   };
   execute(
     'rsync -rzlt --chmod=Dug=rwx,Fug=rw,o-rwx --delete --exclude-from="upload-exclude.txt" --stats --rsync-path="sudo -u www-data rsync" --rsh="ssh" <%= src %>/ <%= dest %>',
@@ -192,5 +193,5 @@ gulp.task('test', function(cb) {
 });
 
 gulp.task('watch', function() {
-  gulp.watch([paths.src, paths.test], ['test-current']);
+  gulp.watch([paths.src_api, paths.test], ['test']);
 });
