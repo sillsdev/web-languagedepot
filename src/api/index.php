@@ -68,11 +68,13 @@ $app->get('/project', function ()
                 'id',
                 'identifier',
                 'created_on',
-                'name'
+            	'description',
+            	'name',
             )
         ));
         $asArray['name'] = utf8_encode($asArray['name']);
         $asArray['type'] = $project->type();
+        $asArray['description'] = utf8_encode($asArray['description']);
         $canEncode = json_encode($asArray);
         if ($canEncode === false) {
             // $fail[] = $asArray;

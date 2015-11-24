@@ -20,10 +20,7 @@
     "angular-route": "~1.2.x",
     "angular-resource": "~1.2.x",
     "angular-ui-bootstrap-bower": "~0.x",
-    "d3": "~3.4",
-    "nvd3": "~1.1.15-beta"
-  },
-  "resolutions": {
-    "d3": "~3.3.13"
+    "d3": "~3.5",
+    "nvd3": "~1.8"
   }
 }
