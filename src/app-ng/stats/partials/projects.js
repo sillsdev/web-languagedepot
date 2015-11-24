@@ -29,7 +29,8 @@ angular.module('sa.projects', [
           return d.type;
         }).y(function(d) {
           return d.value
-        }).showLabels(true);
+        }).showLabels(true)
+          .labelsOutside(true);
 
         d3.select(".chartPublicPie").datum(data).transition().duration(1200).call(chart);
 
@@ -111,7 +112,9 @@ angular.module('sa.projects', [
           return d.type;
         }).y(function(d) {
           return d.value
-        }).showLabels(true);
+        }).showLabels(true)
+          .labelsOutside(true)
+          .labelThreshold(0.05);
 
         d3.select(".chartPrivatePie").datum(data).transition().duration(1200).call(chart);
 

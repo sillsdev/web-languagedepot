@@ -1,2 +1,2 @@
 #!/bin/bash
-php -S localhost:8000 -t htdocs
+php -S localhost:8000 -t src
