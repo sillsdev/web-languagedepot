@@ -113,7 +113,7 @@ gulp.task('upload', function(cb) {
   );
 });
 
-gulp.task('db-copy-1', function(cb) {
+gulp.task('db-copy-public', function(cb) {
   var options = {
     dryRun : false,
     silent : true,
@@ -128,7 +128,7 @@ gulp.task('db-copy-1', function(cb) {
   );
 });
 
-gulp.task('db-copy-2', function(cb) {
+gulp.task('db-copy-private', function(cb) {
   var options = {
     dryRun : false,
     silent : true,
@@ -142,6 +142,20 @@ gulp.task('db-copy-2', function(cb) {
     cb
   );
 });
+
+gulp.task('db-backup', function(cb) {
+	  var options = {
+	    dryRun : false,
+	    silent : true,
+	    password : process.env.password_db,
+	    user: process.env.USER
+	  };
+	  execute(
+	    'mysqldump -u <%= user %> --password=<%= password %> languagedepot languagedepotpvt | gzip > data/backup.sql.gz',
+	    options,
+	    cb
+	  );
+	});
 
 gulp.task('start-webdriver', function(cb) {
   var options = {
