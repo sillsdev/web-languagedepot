@@ -63,7 +63,7 @@ var paths = {
   src_ng: ['src/app-ng/**/*.js', 'src/app-ng/**/*.html', 'src/assets/*'],
   src_less: ['src/app-ng/**/*.less'],
   src_api: ['src/api/**/*.php'],
-  test: ['tests/api/**/*.php']
+  test: ['tests/**/*.php']
 };
 
 // livereload
