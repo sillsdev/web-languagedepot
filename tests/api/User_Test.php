@@ -43,7 +43,7 @@ class UserTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('Bad password', $result->error);
     }
 
-    public function testUserProjects_Ok()
+    public function testUserProjects_All_Ok()
     {
         $client = ApiTestEnvironment::client();
 
@@ -63,10 +63,41 @@ class UserTest extends PHPUnit_Framework_TestCase
         $expected0 = new \stdclass;
         $expected0->identifier = 'testpal-dictionary';
         $expected0->name = 'Test Palaso';
+        $expected0->repository = 'http://public.languagedepot.org';
+        $expected0->role = 'contributor';
         $expected1 = new \stdclass;
         $expected1->identifier = 'lwl2';
         $expected1->name = 'Eastern Lawa';
+        $expected1->repository = 'http://public.languagedepot.org';
+        $expected1->role = 'manager';
         $expected = array($expected0, $expected1);
+        $this->assertEquals($expected, $result);
+    }
+
+    public function testUserProjects_RoleIsManager_Ok()
+    {
+        $client = ApiTestEnvironment::client();
+
+        $response = $client->post('/api/user/test/projects', array(
+            'headers' => ApiTestEnvironment::headers(),
+            'exceptions' => false,
+            'form_params' => array(
+                'password' => 'tset23',
+                'role' => 'manager'
+            )
+        ));
+        $this->assertEquals('200', $response->getStatusCode());
+        $header = $response->getHeader('Content-Type');
+        $this->assertEquals('application/json', $header[0]);
+        $result = $response->getBody();
+        $result = json_decode($result);
+
+        $expected0 = new \stdclass;
+        $expected0->identifier = 'lwl2';
+        $expected0->name = 'Eastern Lawa';
+        $expected0->repository = 'http://public.languagedepot.org';
+        $expected0->role = 'manager';
+        $expected = array($expected0);
         $this->assertEquals($expected, $result);
     }
 
