@@ -1,6 +1,10 @@
 <?php
 use App\api\Models\Project;
+use App\api\Models\User;
 use App\api\ActiveRecordServiceProvider;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 require_once __DIR__ . '/../Config.php';
@@ -17,6 +21,20 @@ $app->register(new ActiveRecordServiceProvider(), array(
     'ActiveRecord.defaultConnection' => 'public'
 ));
 
+$app->before(function (Request $request) {
+    if (0 === strpos($request->headers->get('Content-Type'), 'application/json')) {
+        $data = json_decode($request->getContent(), true);
+        $request->request->replace(is_array($data) ? $data : array());
+    }
+});
+
+$app->error(function (\Exception $e, $code) use ($app) {
+//     $app['monolog']->addError($e->getMessage());
+//     $app['monolog']->addError($e->getTraceAsString());
+
+    return new JsonResponse(array("statusCode" => $code, "message" => $e->getMessage(), "stacktrace" => $e->getTraceAsString()));
+});
+    
 $app->get('/project/private', function ()
 {
     Project::$connection = 'private';
@@ -45,7 +63,7 @@ $app->get('/project/private', function ()
     // var_dump($fail);
     return json_encode($results);
 });
-$app->get('/project/private/{id}', function ($id) use ($app)
+$app->get('/project/private/{id}', function ($id) use($app)
 {
     Project::$connection = 'private';
     $project = Project::find($id);
@@ -54,7 +72,7 @@ $app->get('/project/private/{id}', function ($id) use ($app)
     if ($canEncode === false) {
         throw new \Exception("Cannot encode to json");
     }
-    //     var_dump($asArray);
+    // var_dump($asArray);
     return json_encode($asArray);
 });
 $app->get('/project', function ()
@@ -68,13 +86,11 @@ $app->get('/project', function ()
                 'id',
                 'identifier',
                 'created_on',
-            	'description',
-            	'name',
+                'name'
             )
         ));
         $asArray['name'] = utf8_encode($asArray['name']);
         $asArray['type'] = $project->type();
-        $asArray['description'] = utf8_encode($asArray['description']);
         $canEncode = json_encode($asArray);
         if ($canEncode === false) {
             // $fail[] = $asArray;
@@ -86,7 +102,7 @@ $app->get('/project', function ()
     // var_dump($fail);
     return json_encode($results);
 });
-$app->get('/project/{id}', function ($id) use ($app)
+$app->get('/project/{id}', function ($id) use($app)
 {
     $project = Project::find($id);
     $asArray = $project->to_array();
@@ -94,8 +110,31 @@ $app->get('/project/{id}', function ($id) use ($app)
     if ($canEncode === false) {
         throw new \Exception("Cannot encode to json");
     }
-    //     var_dump($asArray);
+    // var_dump($asArray);
     return json_encode($asArray);
+});
+$app->post('/user/{login}/projects', function ($login, Request $request) use ($app)
+{
+    $user = User::findByLogin($login);
+    if ($user == null) {
+        return new JsonResponse(array('error' => 'Unknown user'), 404);
+    }
+    $password = $request->request->get('password');
+    if (!$user->passwordCheck($password)) {
+        return new JsonResponse(array('error' => 'Bad password'), 403);
+    }
+    $projects = $user->projects;
+    $result = array();
+    foreach($projects as $project) {
+        $o = new \stdclass;
+        $o->identifier = $project->identifier;
+        $o->name = $project->name;
+        // TODO access / role
+        
+        $result[] = $o;
+        
+    }
+    return new JsonResponse($result, 200);
 });
 
 $app->run();

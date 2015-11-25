@@ -2,7 +2,7 @@
 use GuzzleHttp\Client;
 require_once (__DIR__ . '/TestConfig.php');
 
-class TestEnvironment
+class ApiTestEnvironment
 {
 
 	/**

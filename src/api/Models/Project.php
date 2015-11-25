@@ -6,6 +6,11 @@ class Project extends \ActiveRecord\Model
 
     static $connection = 'public';
 
+    static $has_many = array(
+        array('members'),
+        array('users', 'through' => 'members')
+    );
+    
     const TYPE_UNKNOWN  = 'unknown';
     const TYPE_LIFT     = 'lift';
     const TYPE_FLEX     = 'flex';

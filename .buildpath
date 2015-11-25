@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <buildpath>
-	<buildpathentry kind="src" path="src"/>
+	<buildpathentry excluding="vendor/phpunit/php-token-stream/|vendor/symfony/routing/Tests/" kind="src" path="src"/>
 	<buildpathentry kind="src" path="tests"/>
 	<buildpathentry kind="con" path="org.eclipse.php.core.LANGUAGE"/>
 </buildpath>
