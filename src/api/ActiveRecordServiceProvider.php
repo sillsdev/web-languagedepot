@@ -1,5 +1,5 @@
 <?php
-namespace App\api;
+namespace Api;
 
 use Silex\Application;
 use Silex\ServiceProviderInterface;

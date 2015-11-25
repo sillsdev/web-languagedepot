@@ -1,5 +1,5 @@
 <?php
-use App\api\Models\User;
+use Api\Models\User;
 
 require_once (__DIR__ . '/../TestConfig.php');
 require_once (__DIR__ . '/../TestEnvironment.php');
