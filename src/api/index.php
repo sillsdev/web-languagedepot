@@ -123,13 +123,44 @@ $app->post('/user/{login}/projects', function ($login, Request $request) use ($a
     if (!$user->passwordCheck($password)) {
         return new JsonResponse(array('error' => 'Bad password'), 403);
     }
-    $projects = $user->projects;
+    $role = $request->request->get('role');
+    if ($role && $role != 'any') {
+        switch ($role) {
+            case 'manager':
+                $role_id = 3;
+                break;
+            case 'contributor':
+                $role_id = 4;
+                break;
+            default:
+                $role_id = -1;
+        }
+        $conditions = array('user_id = ? AND role_id = ?', $user->id, $role_id);
+    } else {
+        $conditions = array('user_id = ?', $user->id);
+    }
+    
+    $projects = Project::find('all', array(
+        'joins' => array('members'),
+        'select' => 'projects.identifier,projects.name,members.user_id,members.role_id',
+        'conditions' => $conditions
+    ));
     $result = array();
     foreach($projects as $project) {
         $o = new \stdclass;
         $o->identifier = $project->identifier;
         $o->name = $project->name;
-        // TODO access / role
+        $o->repository = 'http://public.languagedepot.org';
+        switch ($project->role_id) {
+            case 3:
+                $o->role = 'manager';
+                break;
+            case 4:
+                $o->role = 'contributor';
+                break;
+            default:
+                $o->role = 'unknown';
+        }
         
         $result[] = $o;
         
