@@ -1,5 +1,5 @@
 <?php
-namespace App\api\Models;
+namespace Api\Models;
 
 class User extends \ActiveRecord\Model
 {

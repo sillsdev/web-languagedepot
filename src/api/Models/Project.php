@@ -1,5 +1,5 @@
 <?php
-namespace App\api\Models;
+namespace Api\Models;
 
 class Project extends \ActiveRecord\Model
 {

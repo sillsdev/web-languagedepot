@@ -1,5 +1,5 @@
 <?php
-namespace App\api\Models;
+namespace Api\Models;
 
 class Member extends \ActiveRecord\Model
 {
