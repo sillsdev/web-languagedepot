@@ -4,6 +4,8 @@ use Site\AssetService;
 use Api\ApiControllerProvider;
 use Api\ActiveRecordServiceProvider;
 use Symfony\Component\HttpFoundation\Request;
+use Silex\Provider\SecurityServiceProvider;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 require_once __DIR__ . '/vendor/autoload.php';
 require_once __DIR__ . '/Config.php';
@@ -24,7 +26,15 @@ $app->register(new ActiveRecordServiceProvider(), array(
     ),
     'ActiveRecord.defaultConnection' => 'public'
 ));
-
+// $app->register(new SecurityServiceProvider(), array(
+//     'security.firewalls' => array(
+//         'private' => array(
+//             'pattern' => '^/api/project/private',
+//             'security' => true,
+//             'form' => array('login_path' => '/user/#login', 'check_path' => '/login_check')
+//         )
+//     )
+// ));
 $app['assets.service'] = $app->share(function() {
     return new AssetService();
 });
@@ -35,14 +45,14 @@ $app->before(function (Request $request) {
     }
 });
 
-$app->error(function (\Exception $e, $code) use ($app) {
-    //     $app['monolog']->addError($e->getMessage());
-    //     $app['monolog']->addError($e->getTraceAsString());
-
-    return new JsonResponse(array('statusCode' => $code, 'message' => $e->getMessage(), 'stacktrace' => $e->getTraceAsString()));
-});
-
-$app->mount('/api', new ApiControllerProvider());
+$app->mount('/api', new ApiControllerProvider())
+    ->before(function(Request $request, Silex\Application $app) {
+        $app->error(function (\Exception $e, $code) use ($app) {
+            //     $app['monolog']->addError($e->getMessage());
+            //     $app['monolog']->addError($e->getTraceAsString());
+            return new JsonResponse(array('statusCode' => $code, 'message' => $e->getMessage(), 'stacktrace' => $e->getTraceAsString()));
+        });
+    });
 
 $app->get('/', function (Silex\Application $app)
 {
