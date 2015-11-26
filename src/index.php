@@ -26,19 +26,27 @@ $app->register(new ActiveRecordServiceProvider(), array(
     ),
     'ActiveRecord.defaultConnection' => 'public'
 ));
+
 // $app->register(new SecurityServiceProvider(), array(
 //     'security.firewalls' => array(
 //         'private' => array(
 //             'pattern' => '^/api/project/private',
 //             'security' => true,
-//             'form' => array('login_path' => '/user/#login', 'check_path' => '/login_check')
+//             'form' => array(
+//                 'login_path' => '/user/#login',
+//                 'check_path' => '/login_check'
+//             )
 //         )
 //     )
 // ));
-$app['assets.service'] = $app->share(function() {
+
+$app['assets.service'] = $app->share(function ()
+{
     return new AssetService();
 });
-$app->before(function (Request $request) {
+
+$app->before(function (Request $request)
+{
     if (0 === strpos($request->headers->get('Content-Type'), 'application/json')) {
         $data = json_decode($request->getContent(), true);
         $request->request->replace(is_array($data) ? $data : array());
@@ -46,11 +54,17 @@ $app->before(function (Request $request) {
 });
 
 $app->mount('/api', new ApiControllerProvider())
-    ->before(function(Request $request, Silex\Application $app) {
-        $app->error(function (\Exception $e, $code) use ($app) {
-            //     $app['monolog']->addError($e->getMessage());
-            //     $app['monolog']->addError($e->getTraceAsString());
-            return new JsonResponse(array('statusCode' => $code, 'message' => $e->getMessage(), 'stacktrace' => $e->getTraceAsString()));
+    ->before(function (Request $request, Silex\Application $app)
+    {
+        $app->error(function (\Exception $e, $code) use($app)
+        {
+            // $app['monolog']->addError($e->getMessage());
+            // $app['monolog']->addError($e->getTraceAsString());
+            return new JsonResponse(array(
+                'statusCode' => $code,
+                'message' => $e->getMessage(),
+                'stacktrace' => $e->getTraceAsString()
+            ));
         });
     });
 
