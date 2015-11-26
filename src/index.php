@@ -68,6 +68,15 @@ $app->mount('/api', new ApiControllerProvider())
         });
     });
 
+$app->get('/stats', function (Silex\Application $app)
+{
+    $assetService = $app['assets.service'];
+    $scripts = $assetService->scriptFiles('app-ng');
+    return $app['twig']->render('app.twig.html', array(
+        'app' => 'ngStatisticsApp',
+        'appScripts' => $scripts
+    ));
+});
 $app->get('/', function (Silex\Application $app)
 {
     $assetService = $app['assets.service'];
