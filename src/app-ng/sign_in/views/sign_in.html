@@ -1,0 +1,46 @@
+
+<h1>Sign in</h1>
+
+<p class="text-muted lead">
+	Don't have an account? <a href="#/join">Join now.</a>
+</p>
+
+<!-- TODO sil-notice or similar here -->
+<div class="alert alert-danger">{{ error }}</div>
+
+<form class="form-horizontal" method="POST" action="/account/sign_in_check">
+
+	<div class="form-group">
+		<label class="col-sm-2 control-label" for="inputEmail">Email</label>
+		<div class="col-sm-6">
+			<input class="form-control" name="_username" type="text"
+				id="inputEmail" placeholder="Email" required
+				value="{{ last_username }}">
+		</div>
+	</div>
+
+	<div class="form-group">
+		<label class="col-sm-2 control-label" for="inputPassword">Password</label>
+		<div class="col-sm-6">
+			<input class="form-control" name="_password" type="password"
+				id="inputPassword" required placeholder="Password">
+		</div>
+	</div>
+
+	<div class="form-group">
+		<div class="col-sm-6 col-sm-offset-2 checkbox">
+			<label> <input type="checkbox" name="_remember_me"
+				value="true" checked> Remember me on this computer
+			</label>
+		</div>
+	</div>
+
+	<div class="form-group">
+		<div class="col-sm-8 col-sm-offset-2">
+			<button type="submit" class="btn btn-primary">Sign in</button>
+			<a style="margin-left: 10px;"
+				href="#/forgot">Forgot your password?</a>
+		</div>
+	</div>
+
+</form>

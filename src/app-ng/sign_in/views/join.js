@@ -1,8 +1,8 @@
 'use strict';
 
-angular.module('registration', [ 'bellows.services', 'ui.bootstrap', 'palaso.ui.notice', 'palaso.ui.utils'])
-.controller('UserCtrl', ['$scope', '$location', 'userService', 'sessionService', 'silNoticeService', '$window', 
-                         function UserCtrl($scope, $location, userService, sessionService, notice, $window) {
+angular.module('sign_in.join', ['ui.bootstrap'/*, 'palaso.ui.notice', 'palaso.ui.utils'*/])
+.controller('JoinCtrl', ['$scope', '$location', 'userService', 'sessionService', 'silNoticeService', '$window', 
+  function UserCtrl($scope, $location, userService, sessionService, notice, $window) {
 
   $scope.record = {};
   $scope.record.id = '';
