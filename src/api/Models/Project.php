@@ -21,6 +21,11 @@ class Project extends \ActiveRecord\Model
     const TYPE_ADAPTIT  = 'adaptit';
     const TYPE_SCHOOL   = 'school';
 
+    public static function findByIdentifier($identifier)
+    {
+        return self::first(array('conditions' => array('identifier = ?', $identifier)));
+    }
+
     public function type()
     {
         // Type is not a first class field, so attempt to infer the type from:

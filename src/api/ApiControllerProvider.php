@@ -17,12 +17,14 @@ class ApiControllerProvider implements ControllerProviderInterface
         $controllers->get('/project/private/{id}', 'project.controller:getPrivate');
         $controllers->get('/project', 'project.controller:getAll');
         $controllers->get('/project/{id}', 'project.controller:get');
-    
+        $controllers->get('/project/exists/{projectCode}', 'project.controller:projectCodeIsAvailable');
+
         $app['user.controller'] = $app->share(function() {
             return new UserController();
         });
         $controllers->post('/user/{login}/projects', 'user.controller:getProjectsAccess');
-        
+        $controllers->get('/user/exists/{username}', 'user.controller:usernameIsAvailable');
+
         return $controllers;
     }
 }

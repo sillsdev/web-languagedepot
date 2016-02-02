@@ -61,5 +61,11 @@ class ProjectController
         // var_dump($asArray);
         return json_encode($asArray);
     }
+
+    public function projectCodeIsAvailable($projectCode) {
+        // only includes 'public' projects for now
+        $project = Project::findByIdentifier($projectCode);
+        return json_encode($project == null);
+    }
     
 }

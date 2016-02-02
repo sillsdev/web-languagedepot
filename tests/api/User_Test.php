@@ -101,4 +101,34 @@ class UserTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $result);
     }
 
+    public function usernameIsAvailable_usernameDoesntExist_true() {
+        $client = ApiTestEnvironment::client();
+
+        $nonexistentUsername = 'ran4domuser6543';
+
+        $response = $client->get('/api/user/exists/' . $nonexistentUsername, array(
+            'headers' => ApiTestEnvironment::headers()
+        ));
+        $this->assertEquals('200', $response->getStatusCode());
+        $result = $response->getBody();
+        $result = json_decode($result);
+
+        $this->assertTrue($result);
+
+    }
+
+    public function usernameIsAvailable_usernameExists_false() {
+        $client = ApiTestEnvironment::client();
+
+        $existingUsername = 'test';
+
+        $response = $client->get('/api/user/exists/' . $existingUsername, array(
+            'headers' => ApiTestEnvironment::headers()
+        ));
+        $this->assertEquals('200', $response->getStatusCode());
+        $result = $response->getBody();
+        $result = json_decode($result);
+
+        $this->assertFalse($result);
+    }
 }

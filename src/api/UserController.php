@@ -8,6 +8,11 @@ use Api\Models\User;
 
 class UserController
 {
+    public function usernameIsAvailable($username) {
+        $user = User::findByLogin($username);
+        return ($user == null);
+
+    }
     public function getProjectsAccess($login, Request $request)
     {
         $user = User::findByLogin($login);

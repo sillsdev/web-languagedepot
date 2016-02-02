@@ -87,5 +87,34 @@ class ProjectTest extends PHPUnit_Framework_TestCase
     
         $this->assertEquals($expected, $result);
     }
-    
+
+    public function testProjectCodeIsAvailable_CodeExists_False() {
+        $client = ApiTestEnvironment::client();
+
+        $existingProjectCode = 'tpi';
+
+        $response = $client->get('/api/project/exists/' . $existingProjectCode, array(
+            'headers' => ApiTestEnvironment::headers()
+        ));
+        $this->assertEquals('200', $response->getStatusCode());
+        $result = $response->getBody();
+        $result = json_decode($result);
+
+        $this->assertFalse($result);
+    }
+
+    public function testProjectCodeIsAvailable_CodeNotExist_True() {
+        $client = ApiTestEnvironment::client();
+
+        $nonexistentProjectCode = 'ran4domproj6543';
+
+        $response = $client->get('/api/project/exists/' . $nonexistentProjectCode, array(
+            'headers' => ApiTestEnvironment::headers()
+        ));
+        $this->assertEquals('200', $response->getStatusCode());
+        $result = $response->getBody();
+        $result = json_decode($result);
+
+        $this->assertTrue($result);
+    }
 }
