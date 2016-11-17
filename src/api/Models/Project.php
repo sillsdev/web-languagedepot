@@ -17,7 +17,7 @@ class Project extends \ActiveRecord\Model
     const TYPE_OURWORD  = 'ourword';
     const TYPE_ONESTORY = 'onestory';
     const TYPE_TEST     = 'test';
-    const TYPE_BLOOM    = 'bloom';
+    // const TYPE_BLOOM    = 'bloom';
     const TYPE_ADAPTIT  = 'adaptit';
     const TYPE_SCHOOL   = 'school';
 
@@ -47,9 +47,8 @@ class Project extends \ActiveRecord\Model
                 return self::TYPE_FLEX;
             case 'test':
             case 'demo':
+            case 'bloom': // Count Bloom as a test project as it does not yet have S/R CP 2016-11
                 return self::TYPE_TEST;
-            case 'bloom':
-                return self::TYPE_BLOOM;
             case 'adapt':
                 return self::TYPE_ADAPTIT;
             case 'gial':
@@ -79,7 +78,7 @@ class Project extends \ActiveRecord\Model
             'ose' => self::TYPE_ONESTORY,
             'translation' => self::TYPE_OURWORD,
             'test' => self::TYPE_TEST,
-            'bloom' => self::TYPE_BLOOM,
+            'bloom' => self::TYPE_TEST, // Count Bloom as a test project as it does not yet have S/R CP 2016-11
             'adapt' => self::TYPE_ADAPTIT,
             'gial' => self::TYPE_SCHOOL,
             'GILLBT' => self::TYPE_SCHOOL,
