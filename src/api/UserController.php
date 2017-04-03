@@ -49,7 +49,7 @@ class UserController
         foreach($projects as $project) {
             $o = new \stdclass;
             $o->identifier = $project->identifier;
-            $o->name = $project->name;
+            $o->name = utf8_encode($project->name);
             $o->repository = 'http://public.languagedepot.org';
             switch ($project->role_id) {
                 case 3:
