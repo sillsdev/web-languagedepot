@@ -2,7 +2,7 @@
 
 - name: Deploy development environment for admin.languagedepot.org
   hosts: all
-  sudo: yes
+  become: yes
   pre_tasks:
     - include_vars: "vars_{{ deploy }}.yml"
   roles:
@@ -12,17 +12,28 @@
     # - ssl_config
     - apache_config
   tasks:
-    - name: install packages
+    - name: install packages for non-xenial
       apt: name="{{item}}" state=present
       with_items:
         - libapache2-mod-php5
+        - php5-mysql
         - php5-gd
         - php5-cli
+      when: ansible_distribution != 'Ubuntu'
+
+    - name: install packages for xenial
+      apt: name="{{item}}" state=present
+      with_items:
+        - libapache2-mod-php
+        - php7.0-mysql
+        - php7.0-gd
+        - php7.0-cli
+      when: ansible_distribution == 'Ubuntu' && ansible_distribution_release == 'xenial'
 
     - name: php log folder exists
       file: path={{php_log_folder}} state=directory owner=www-data group=www-data mode=0775 recurse=yes
 
-    - name: php.ini changes
+    - name: php.ini changes for non-xenial
       lineinfile:
         dest: /etc/php5/apache2/php.ini
         regexp: '^;?{{item.property}}'
@@ -42,6 +53,29 @@
         - property: 'upload_max_filesize'
           value: '60M'
       notify: Restart apache
+      when: ansible_distribution != 'Ubuntu'
+
+    - name: php.ini changes for xenial
+      lineinfile:
+        dest: /etc/php/7.0/apache2/php.ini
+        regexp: '^;?{{item.property}}'
+        line: "{{item.property}} = {{item.value}}"
+        backrefs: yes
+      with_items:
+        - property: 'memory_limit'
+          value: '256M'
+        - property: 'display_errors'
+          value: 'On'
+        - property: 'display_startup_errors'
+          value: 'On'
+        - property: 'error_log'
+          value: '{{php_log_folder}}/php_error.log'
+        - property: 'post_max_size'
+          value: '60M'
+        - property: 'upload_max_filesize'
+          value: '60M'
+      notify: Restart apache
+      when: ansible_distribution == 'Ubuntu' && ansible_distribution_release == 'xenial'
 
     - name: Ensure default_local folder does not exist (localhost)
       file: path="/var/www/virtual/default_local" state=absent force=true
