@@ -7,5 +7,4 @@
 - include: dependencies.yml
   vars:
     deploy: palaso
-    php_ini_path: /etc/php/7.0/apache2/php.ini
 - include: code.yml

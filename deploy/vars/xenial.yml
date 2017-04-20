@@ -1,0 +1,10 @@
+---
+
+php_path: /etc/php/7.0
+
+dependencies_packages:
+  - libapache2-mod-php
+  #- mysql-server will be manually installed first to set the root password
+  - php7.0-mysql
+  - php7.0-gd
+  - php7.0-cli

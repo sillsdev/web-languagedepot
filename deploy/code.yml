@@ -1,6 +1,6 @@
 ---
 
-- name: Deploy code for admin.languagedepot.org
+- name: Deploy code for api.languagedepot.org
   hosts: all
   become: no
   tasks:
@@ -11,7 +11,7 @@
       changed_when: false
       when: inventory_hostname == "localhost"
       with_items:
-        - /var/www/virtual/languagedepot.org_admin/htdocs
+        - /var/www/languagedepot.org_api/htdocs
 
     - name: bower install
       command: bower install --allow-root
@@ -20,4 +20,4 @@
       changed_when: false
       when: inventory_hostname == "localhost"
       with_items:
-        - /var/www/virtual/languagedepot.org_admin/htdocs
+        - /var/www/languagedepot.org_api/htdocs
