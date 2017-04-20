@@ -3,7 +3,8 @@
 # vars_palaso
 
 php_log_folder: /var/log/php
-repo_path: /home/cambell/src/xForge/web-languagedepot-api
+#repo_path: /home/cambell/src/xForge/web-languagedepot-api
+repo_path: /var/www/virtual/default_local/web-languagedepot-api
 
 apache_site_enable:
   - default_local.conf
