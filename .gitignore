@@ -1,6 +1,7 @@
 .externalToolBuilders/
 .idea/
 *.pyc
+data/
 PhpUnitTests.xml
 node_modules/
 src/vendor/

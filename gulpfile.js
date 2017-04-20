@@ -134,7 +134,8 @@ gulp.task('db-backup', function(cb) {
     user: process.env.USER
   };
   execute(
-    'mysqldump -u <%= user %> --password=<%= password %> languagedepot languagedepotpvt | gzip > data/backup.sql.gz',
+    'mysqldump -u <%= user %> --password=<%= password %> languagedepot | gzip > data/languagedepot.sql.gz;' +
+    'mysqldump -u <%= user %> --password=<%= password %> languagedepotpvt | gzip > data/languagedepotpvt.sql.gz;',
     options,
     cb
   );
