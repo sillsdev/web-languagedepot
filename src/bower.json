@@ -1,6 +1,6 @@
 {
-  "name": "LanguageDeopt Stats",
-  "description": "LanguageDepot Stats",
+  "name": "LanguageDepot API",
+  "description": "LanguageDepot API",
   "main": "index.php",
   "authors": [
     "SIL"

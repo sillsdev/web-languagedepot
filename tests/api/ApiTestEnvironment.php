@@ -1,6 +1,5 @@
 <?php
 use GuzzleHttp\Client;
-require_once (__DIR__ . '/TestConfig.php');
 
 class ApiTestEnvironment
 {

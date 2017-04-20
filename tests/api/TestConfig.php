@@ -1,10 +1,15 @@
 <?php
 
-ini_set('xdebug.show_exception_trace', 0);
+$rootPath = realpath(__DIR__ . '/../..') . DIRECTORY_SEPARATOR;
 
-$apiPath = realpath(__DIR__ . '/../../src/api');
-$testPath = realpath(__DIR__);
-define('API_PATH', $apiPath);
-define('API_TEST_PATH', $testPath);
+if (! defined('API_PATH')) {
+    define('API_PATH', $rootPath . 'src/api/');
+}
+
+if (!defined('API_TEST_PATH')) {
+    define('API_TEST_PATH', $rootPath . 'tests/api/');
+}
 
 require_once API_PATH . '/../vendor/autoload.php';
+
+require_once API_TEST_PATH . '/ApiTestEnvironment.php';

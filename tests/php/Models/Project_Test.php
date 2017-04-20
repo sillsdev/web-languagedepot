@@ -1,9 +1,7 @@
 <?php
 use Api\Models\Project;
 use Api\Models\User;
-
-require_once (__DIR__ . '/../TestConfig.php');
-require_once (__DIR__ . '/../TestEnvironment.php');
+//use PHPUnit_Framework_TestCase;
 
 TestEnvironment::ensureDatabaseConfigured();
 

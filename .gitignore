@@ -1,6 +1,10 @@
+.externalToolBuilders/
+.idea/
+*.pyc
+PhpUnitTests.xml
 node_modules/
 src/vendor/
 src/vendor_bower/
-.externalToolBuilders/
+tests/CodeCoverage/
+
 /src/assets/site.css
-*.pyc
