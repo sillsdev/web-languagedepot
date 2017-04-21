@@ -2,7 +2,7 @@
 
 - name: Linux Debian webserver (usually in VM)
   hosts: all
-  sudo: yes
+  become: yes
   tasks:
     - name: install packages
       apt: name="{{item}}" state=present
@@ -13,5 +13,3 @@
   vars:
     deploy: palaso
 - include: code.yml
-  vars:
-    lf_path: /var/www/virtual/default_local/web-languageforge
