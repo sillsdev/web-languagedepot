@@ -14,7 +14,7 @@ var concat = require('gulp-concat');
 var sourcemaps = require('gulp-sourcemaps');
 
 var execute = function(command, options, callback) {
-  if (options == undefined) {
+  if (typeof options === 'undefined') {
     options = {};
   }
 
@@ -73,7 +73,7 @@ gulp.task('reload', function() {
 });
 
 gulp.task('less', function() {
-  gulp.src(paths.src_less)
+  return gulp.src(paths.src_less)
     .pipe(sourcemaps.init())
     .pipe(less())
     .pipe(concat('site.css'))

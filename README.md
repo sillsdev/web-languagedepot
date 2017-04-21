@@ -52,10 +52,11 @@ ansible-playbook -i hosts playbook_create_config.yml --limit localhost -K
 ansible-playbook -i hosts playbook_xenial.yml --limit localhost -K
 ````
 
-Install node_modules used to run gulp tasks and E2E tests
+Install node_modules used to build Less files and run E2E tests
 ```
 cd ..
 npm install
+gulp less
 ```
 
 ## Updating dependencies ##
