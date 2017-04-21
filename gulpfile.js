@@ -7,7 +7,7 @@ var rename = require("gulp-rename");
 var less = require('gulp-less');
 var phpunit = require('gulp-phpunit');
 var protractor = require('gulp-protractor');
-var webdriverStandalone = require('gulp-protractor').webderiver_standalone;
+var webdriverStandalone = require('gulp-protractor').webdriver_standalone;
 var webdriverUpdate = require('gulp-protractor').webdriver_update;
 var uglify = require('gulp-uglify');
 var concat = require('gulp-concat');
@@ -153,7 +153,7 @@ gulp.task('test-php-startServer', function(cb) {
 });
 
 gulp.task('test-php', function() {
-  var src = 'tests/api/phpunit.xml';
+  var src = 'tests/phpunit.xml';
   var params = require('yargs')
     .option('debug', {
       demand: false,
@@ -174,14 +174,14 @@ gulp.task('test-php', function() {
     delete options.logJunit;
   }
   if (params.coverage) {
-    options.coverageHtml = 'tests/CodeCoverage/Api/';
+    options.coverageHtml = 'tests/CodeCoverage/api';
   }
 
   gutil.log("##teamcity[importData type='junit' path='PhpUnitTests.xml']");
   return gulp.src(src)
     .pipe(phpunit('src/vendor/bin/phpunit', options));
 });
-gulp.task('test-php').description = 'Unit tests for API';
+gulp.task('test-php').description = 'API and Unit tests';
 
 gulp.task('watch', function() {
   gulp.watch([paths.src_api, paths.test], ['test']);
