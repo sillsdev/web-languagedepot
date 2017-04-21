@@ -1,9 +1,10 @@
-web-languagedepot-stats
-=======================
-
 # web-languagedepot-api #
 
-## Manually install and configure mysql ##
+## Recommended Development Environment ##
+
+Our recommended development environment for web development is Linux Ubuntu GNOME.
+
+## Manually Install and Configure MySQL ##
 
 ```
 sudo apt-get install mysql-server
@@ -17,7 +18,7 @@ create database languagedepot;
 create database languagedepotpvt;
 create user '<USER>'@'localhost';
 grant all on *.* to '<USER>'@'localhost';
-create user 'test'@'localhhost' identified by 'test';
+create user 'test'@'localhost' identified by 'test';
 grant all on *.* to 'test'@'localhost';
 quit
 ```
@@ -27,25 +28,35 @@ Restore from command prompt
 mysql languagedepot < languagedepot.sql
 mysql languagedepotpvt < languagedepotpvt.sql
 ```
-## Recommended Development Environment ##
-
-Our recommended development environment for web development is Linux Ubuntu GNOME.
-
----------------------------------
 
 ### Local Linux Development Setup <a id="LocalSetup"></a>
 
-Start with the Ansible-assisted setup [described here](https://github.com/sillsdev/ops-devbox) to install and configure a basic development environment.
+After manually configuring MySQL, run the Ansible-assisted setup [described here](https://github.com/sillsdev/ops-devbox) to install and configure a basic development environment.
 
 
-#### Installation and Deployment
+#### Installation and Deployment ####
 After creating your Ansible-assisted setup, clone this repository. From your *home* folder...
 
 ````
-mkdir src/
-cd src/
-git clone https://github.com/sillsdev/web-languagedepot-api
+mkdir src
+cd src
+git clone https://github.com/sillsdev/web-languagedepot-api --recurse-submodules
 ````
+The `--recurse-submodules` is used to fetch many of the Ansible roles used by the Ansible playbooks in the deploy folder. If you've already cloned the repo without `--recurse-submodules`, run `git submodule update --init --recursive` to pull and initialize them.
+
+Run the following Ansible playbooks to configure Ansible and run the site.
+
+````
+cd web-languagedepot-api/deploy
+ansible-playbook -i hosts playbook_create_config.yml --limit localhost -K
+ansible-playbook -i hosts playbook_xenial.yml --limit localhost -K
+````
+
+Install node_modules used to run gulp tasks and E2E tests
+```
+cd ..
+npm install
+```
 
 ## Updating dependencies ##
 
@@ -79,14 +90,19 @@ For `Path to script` browse to `web-languageforge-api/src/vendor/autoload.php`
 Under Test Runner
 Select *Default configuration file* and browse to `web-languageforge-api/tests/phpunit.xml`
 
-Select *Default bootsrap file* and browse to `web-languageforge-api/tests/TestConfig.php`
+Select *Default bootstrap file* and browse to `web-languageforge-api/tests/TestConfig.php`
 
 #### Running the tests ####
-In a separate terminal, `gulp test-php`.
+In a terminal, `gulp test-php`.
 
 To test with debug info `gulp test-php --debug true`
 
 To test with code coverage `gulp test-php --coverage true`.  
 This will generate test coverage report in `tests/CodeCoverage/index.html`. 
 
-To run tests in PhpStorm, browse to the project view, right-click `tests` and select `Run tests`.
+To run tests in PhpStorm, browse to the project view, right-click `tests` folder and select `Run 'tests'`.
+
+## Language Depot Stats ##
+
+Browse to [admin.languagedepot.org](http://admin.languagedepot.org/) to see reports.
+
