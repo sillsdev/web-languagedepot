@@ -1,10 +1,14 @@
 var gulp = require('gulp');
 var gutil = require('gulp-util');
-var child_process = require('child_process');
+var _execute = require('child_process').exec;
 var async = require('async');
-var template = require('lodash.template');
+var _template = require('lodash.template');
 var rename = require("gulp-rename");
 var less = require('gulp-less');
+var phpunit = require('gulp-phpunit');
+var protractor = require('gulp-protractor');
+var webdriverStandalone = require('gulp-protractor').webdriver_standalone;
+var webdriverUpdate = require('gulp-protractor').webdriver_update;
 var uglify = require('gulp-uglify');
 var concat = require('gulp-concat');
 var sourcemaps = require('gulp-sourcemaps');
@@ -13,50 +17,29 @@ var execute = function(command, options, callback) {
   if (options == undefined) {
     options = {};
   }
-  command = template(command, options);
+
+  options.maxBuffer = 1024 * 1000; // byte
+
+  var template = _template(command);
+  command = template(options);
   if (!options.silent) {
     gutil.log(gutil.colors.green(command));
   }
+
   if (!options.dryRun) {
-    child_process.exec(command, function(err, stdout, stderr) {
-      gutil.log(stdout);
-      gutil.log(gutil.colors.yellow(stderr));
-      callback(err);
+    var process = _execute(command, options, callback || undefined);
+
+    process.stdout.on('data', function (data) {
+      gutil.log(data.slice(0, -1)); // remove trailing \n
     });
+
+    process.stderr.on('data', function (data) {
+      gutil.log(gutil.colors.yellow(data.slice(0, -1))); // remove trailing \n
+    });
+
   } else {
     callback(null);
   }
-};
-
-var start_server = function(options, cb) {
-  var child = child_process.spawn(options.command, options.arguments, {
-    detached: true,
-    cwd: process.cwd,
-    env: process.env,
-    stdio: ['pipe', 'pipe', 'pipe']
-//    stdio: ['ignroe', process.stdout, process.stderr]
-//    stdio: ['ignore', 'pipe', 'pipe']
-  });
-
-  child.once('close', cb);
-  child.unref();
-
-  if (child.stdout) child.stdout.on('data', function(data) {
-//    gutil.log(gutil.colors.yellow('boo '));
-    gutil.log(gutil.colors.yellow(data));
-//    console.log(data);
-    var sentinal = options.sentinal;
-    if (data.toString().indexOf(sentinal) != -1) {
-      cb(null, child);
-    }
-  });
-  if (child.stderr) child.stderr.on('data', function(data) {
-    gutil.log(gutil.colors.red(data));
-    var sentinal = options.sentinal;
-    if (data.toString().indexOf(sentinal) != -1) {
-      cb(null, child);
-    }
-  });
 };
 
 var paths = {
@@ -144,67 +127,61 @@ gulp.task('db-copy-private', function(cb) {
 });
 
 gulp.task('db-backup', function(cb) {
-	  var options = {
-	    dryRun : false,
-	    silent : true,
-	    password : process.env.password_db,
-	    user: process.env.USER
-	  };
-	  execute(
-	    'mysqldump -u <%= user %> --password=<%= password %> languagedepot languagedepotpvt | gzip > data/backup.sql.gz',
-	    options,
-	    cb
-	  );
-	});
-
-gulp.task('start-webdriver', function(cb) {
   var options = {
-      command: '/usr/local/bin/webdriver-manager',
-      arguments: ['start'],
-      sentinal: 'Started org.openqa.jetty.jetty.Server'
+    dryRun : false,
+    silent : true,
+    password : process.env.password_db,
+    user: process.env.USER
   };
-  start_server(options, cb);
+  execute(
+    'mysqldump -u <%= user %> --password=<%= password %> languagedepot | gzip > data/languagedepot.sql.gz;' +
+    'mysqldump -u <%= user %> --password=<%= password %> languagedepotpvt | gzip > data/languagedepotpvt.sql.gz;',
+    options,
+    cb
+  );
 });
 
-gulp.task('start-php', function(cb) {
+gulp.task('update-webdriver', webdriverUpdate);
+gulp.task('start-webdriver', webdriverStandalone);
+
+gulp.task('test-php-startServer', function(cb) {
+  execute(
+    './build-startServer.sh',
+    null,
+    cb
+  );
+});
+
+gulp.task('test-php', function() {
+  var src = 'tests/phpunit.xml';
+  var params = require('yargs')
+    .option('debug', {
+      demand: false,
+      describe: 'flag to run phpunit with debug',
+      type: 'boolean' })
+    .option('coverage', {
+      demand: false,
+      describe: 'flag to run phpunit with code coverage',
+      type: 'boolean' })
+    .argv;
   var options = {
-      command: '/usr/bin/php',
-      arguments: ['-S', 'localhost:8000', '-t', 'htdocs'],
-      sentinal: 'Press Ctrl-C to quit.'
+    dryRun: false,
+    debug: false,
+    logJunit: 'PhpUnitTests.xml'
   };
-  start_server(options, cb);
-//execute('/usr/bin/php -S localhost:8000 -t htdocs &', null, cb);
-});
+  if (params.debug) {
+    options.debug = true;
+    delete options.logJunit;
+  }
+  if (params.coverage) {
+    options.coverageHtml = 'tests/CodeCoverage/api';
+  }
 
-gulp.task('test-e2e', function(cb) {
-  execute(
-    'protractor tests/e2e/phantom-conf.js',
-    null,
-    cb
-  );
+  gutil.log("##teamcity[importData type='junit' path='PhpUnitTests.xml']");
+  return gulp.src(src)
+    .pipe(phpunit('src/vendor/bin/phpunit', options));
 });
-
-gulp.task('test-chrome', function(cb) {
-  execute(
-    'protractor tests/e2e/chrome-conf.js',
-    null,
-    cb
-  );
-});
-
-gulp.task('test-current', function(cb) {
-  execute(
-    'protractor tests/e2e/phantom-conf.js',
-    null,
-    cb
-  );
-});
-
-gulp.task('test', function(cb) {
-  execute('/usr/bin/env php src/vendor/bin/phpunit -c phpunit.xml', null, function(err) {
-    cb(null); // Swallow the error propagation so that gulp doesn't display a nodejs backtrace.
-  });
-});
+gulp.task('test-php').description = 'API and Unit tests';
 
 gulp.task('watch', function() {
   gulp.watch([paths.src_api, paths.test], ['test']);

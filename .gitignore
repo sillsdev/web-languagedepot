@@ -1,10 +1,13 @@
 .externalToolBuilders/
 .idea/
 node_modules/
+data/
 deploy/ansible.cfg
 deploy/**/*.retry
 deploy/callback_plugins/*.pyc
 src/vendor/
 src/vendor_bower/
-/src/assets/site.css
+tests/CodeCoverage/
+src/assets/site.css
+PhpUnitTests.xml
 *.pyc

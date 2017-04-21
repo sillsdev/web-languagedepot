@@ -1,9 +1,6 @@
 <?php
 use GuzzleHttp\Client;
-
-require_once (__DIR__ . '/TestConfig.php');
-
-require_once (API_TEST_PATH . '/ApiTestEnvironment.php');
+//use PHPUnit_Framework_TestCase;
 
 class ProjectTest extends PHPUnit_Framework_TestCase
 {

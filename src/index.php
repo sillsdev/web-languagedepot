@@ -4,6 +4,7 @@ use Site\AssetService;
 use Api\ApiControllerProvider;
 use Api\ActiveRecordServiceProvider;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 require_once __DIR__ . '/vendor/autoload.php';
 require_once __DIR__ . '/Config.php';
