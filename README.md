@@ -5,6 +5,30 @@ browse to [admin.languagedepot.org](http://admin.languagedepot.org/) to see repo
 
 # web-languagedepot-api #
 
+## Manually install and configure mysql ##
+
+```
+sudo apt-get install mysql-server
+```
+When prompted, set the default password to '*password*'. 
+
+Create the users, databases and grant all privileges to local user.  Replace `<USER>` with your username.
+```
+mysql -u root -p
+create database languagedepot;
+create database languagedepotpvt;
+create user '<USER>'@'localhost';
+grant all on *.* to '<USER>'@'localhost';
+create user 'test'@'localhhost' identified by 'test';
+grant all on *.* to 'test'@'localhost';
+quit
+```
+
+Restore from command prompt
+```
+mysql languagedepot < languagedepot.sql
+mysql languagedepotpvt < languagedepotpvt.sql
+```
 
 ## Recommended Development Environment ##
 
@@ -58,7 +82,7 @@ For `Path to script` browse to `web-languageforge-api/src/vendor/autoload.php`
 Under Test Runner
 Select *Default configuration file* and browse to `web-languageforge-api/tests/phpunit.xml`
 
-Select *Default boostrap file* and browse to `web-languageforge-api/tests/TestConfig.php`
+Select *Default bootsrap file* and browse to `web-languageforge-api/tests/TestConfig.php`
 
 #### Running the tests ####
 In a separate terminal, `gulp test-php`.
