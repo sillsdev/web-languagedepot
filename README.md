@@ -61,7 +61,6 @@ Select *Default configuration file* and browse to `web-languageforge-api/tests/p
 Select *Default boostrap file* and browse to `web-languageforge-api/tests/TestConfig.php`
 
 #### Running the tests ####
-In the **root** folder, start the test server `gulp test-php-startServer`
 In a separate terminal, `gulp test-php`.
 
 To test with debug info `gulp test-php --debug true`
