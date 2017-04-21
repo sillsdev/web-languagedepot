@@ -8,7 +8,6 @@ deploy/callback_plugins/*.pyc
 src/vendor/
 src/vendor_bower/
 tests/CodeCoverage/
-
 src/assets/site.css
 PhpUnitTests.xml
 *.pyc

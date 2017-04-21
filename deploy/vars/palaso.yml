@@ -1,0 +1,40 @@
+---
+
+php_log_folder: /var/log/php
+repo_path: "{{local_dir.stdout | dirname | realpath}}"
+
+apache_module_enable:
+  - rewrite
+  - ssl
+  - proxy
+  - proxy_http
+
+apache_site_enable:
+  - languagedepot_org.conf
+  - languagedepot_org_api.conf
+
+apache_vhosts:
+  - server_name: languagedepot.org
+    server_admin: webmaster@palaso.org
+    server_file_name: languagedepot_org
+    template: vhost_proxy_ssl.conf.j2
+    virtual_hosts:
+      - has_ssl: false
+        port: 80
+        server_alias:
+          - languagedepot.local
+        proxy: "http://localhost:3001/"
+  - server_name: api.languagedepot.org
+    server_admin: webmaster@palaso.org
+    server_file_name: languagedepot_org_api
+    template: vhost_ssl.conf.j2
+    document_root: /var/www/languagedepot.org_api/htdocs
+    link_to: "{{repo_path}}/src"
+    directory_extra:
+      - RewriteEngine On
+    virtual_hosts:
+      - has_ssl: false
+        port: 80
+        server_alias:
+          - api.languagedepot.local
+          - admin.languagedepot.local

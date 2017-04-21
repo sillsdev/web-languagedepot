@@ -1,8 +1,6 @@
 web-languagedepot-stats
 =======================
 
-browse to [admin.languagedepot.org](http://admin.languagedepot.org/) to see reports.
-
 # web-languagedepot-api #
 
 ## Manually install and configure mysql ##
@@ -29,7 +27,6 @@ Restore from command prompt
 mysql languagedepot < languagedepot.sql
 mysql languagedepotpvt < languagedepotpvt.sql
 ```
-
 ## Recommended Development Environment ##
 
 Our recommended development environment for web development is Linux Ubuntu GNOME.

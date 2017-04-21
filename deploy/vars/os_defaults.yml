@@ -1,0 +1,10 @@
+---
+
+php_path: /etc/php5
+
+dependencies_packages:
+  - libapache2-mod-php5
+  #- mysql-server will be manually installed first to set the root password
+  - php5-mysql
+  - php5-gd
+  - php5-cli
