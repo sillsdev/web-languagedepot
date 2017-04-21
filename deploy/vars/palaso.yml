@@ -3,6 +3,12 @@
 php_log_folder: /var/log/php
 repo_path: "{{local_dir.stdout | dirname | realpath}}"
 
+apache_module_enable:
+  - rewrite
+  - ssl
+  - proxy
+  - proxy_http
+
 apache_site_enable:
   - languagedepot_org.conf
   - languagedepot_org_api.conf
