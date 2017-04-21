@@ -1,3 +1,9 @@
+// -------------------------------------
+//   Task: Display Tasks
+// gulp -T                 Print the task dependency tree
+// gulp --tasks-simple     Print a list of gulp task names
+// -------------------------------------
+
 var gulp = require('gulp');
 var gutil = require('gulp-util');
 var _execute = require('child_process').exec;
@@ -12,9 +18,12 @@ var webdriverUpdate = require('gulp-protractor').webdriver_update;
 var uglify = require('gulp-uglify');
 var concat = require('gulp-concat');
 var sourcemaps = require('gulp-sourcemaps');
+var livereload = require('gulp-livereload');
+var lr = require('tiny-lr');
+var server = lr();
 
 var execute = function(command, options, callback) {
-  if (typeof options === 'undefined') {
+  if (!options) {
     options = {};
   }
 
@@ -49,15 +58,6 @@ var paths = {
   test: ['tests/**/*.php']
 };
 
-// livereload
-var livereload = require('gulp-livereload');
-var lr = require('tiny-lr');
-var server = lr();
-
-gulp.task('default', function() {
-  // place code for your default task here
-});
-
 gulp.task('do-reload', function() {
   return gulp.src('src/index.php').pipe(livereload(server));
 });
@@ -70,30 +70,6 @@ gulp.task('reload', function() {
     gulp.watch(paths.src_ng, [ 'do-reload' ]);
     gulp.watch(paths.src_less, [ 'less' ]);
   });
-});
-
-gulp.task('less', function() {
-  return gulp.src(paths.src_less)
-    .pipe(sourcemaps.init())
-    .pipe(less())
-    .pipe(concat('site.css'))
-    .pipe(sourcemaps.write())
-    .pipe(gulp.dest('src/assets')
-  );
-});
-
-gulp.task('upload', function(cb) {
-  var options = {
-    dryRun: false,
-    silent : false,
-    src : "src",
-    dest : "root@public.languagedepot.org:/var/www/languagedepot.org_admin/htdocs/"
-  };
-  execute(
-    'rsync -rzlt --chmod=Dug=rwx,Fug=rw,o-rwx --delete --exclude-from="upload-exclude.txt" --stats --rsync-path="sudo -u www-data rsync" --rsh="ssh" <%= src %>/ <%= dest %>',
-    options,
-    cb
-  );
 });
 
 gulp.task('db-copy-public', function(cb) {
@@ -141,17 +117,25 @@ gulp.task('db-backup', function(cb) {
   );
 });
 
-gulp.task('update-webdriver', webdriverUpdate);
-gulp.task('start-webdriver', webdriverStandalone);
+//region less
 
-gulp.task('test-php-startServer', function(cb) {
-  execute(
-    './build-startServer.sh',
-    null,
-    cb
-  );
+gulp.task('less', function() {
+  return gulp.src(paths.src_less)
+    .pipe(sourcemaps.init())
+    .pipe(less())
+    .pipe(concat('site.css'))
+    .pipe(sourcemaps.write())
+    .pipe(gulp.dest('src/assets')
+    );
 });
 
+// endregion less
+
+//region test
+
+// -------------------------------------
+//   Task: test-php-setupTestEnvironment
+// -------------------------------------
 gulp.task('test-php-setupTestEnvironment', function (cb) {
   var options = {
     dryRun: false,
@@ -165,6 +149,9 @@ gulp.task('test-php-setupTestEnvironment', function (cb) {
   );
 });
 
+// -------------------------------------
+//   Task: test-php-run
+// -------------------------------------
 gulp.task('test-php-run', function() {
   var src = 'tests/phpunit.xml';
   var params = require('yargs')
@@ -196,12 +183,147 @@ gulp.task('test-php-run', function() {
 });
 gulp.task('test-php-run').description = 'run API and Unit tests';
 
+// -------------------------------------
+//   Task: test-php
+// -------------------------------------
 gulp.task('test-php',
   gulp.series(
     'test-php-setupTestEnvironment',
     'test-php-run')
 );
 
-gulp.task('watch', function() {
-  gulp.watch([paths.src_api, paths.test], ['test']);
+// -------------------------------------
+//   Task: test-php-watch
+// -------------------------------------
+gulp.task('test-php-watch', function () {
+  gulp.watch([paths.src_api, paths.test], ['test-php']);
 });
+
+// -------------------------------------
+//   Task: E2E Test: Webdriver Update
+// -------------------------------------
+gulp.task('test-e2e-webdriver_update', webdriverUpdate);
+
+// -------------------------------------
+//   Task: E2E Test: Webdriver Standalone
+// -------------------------------------
+gulp.task('test-e2e-webdriver_standalone', webdriverStandalone);
+
+// -------------------------------------
+//   Task: Test Restart Webserver
+// -------------------------------------
+gulp.task('test-restart-webserver', function (cb) {
+  execute(
+    'sudo service apache2 restart',
+    null,
+    cb
+  );
+});
+
+// endregion test
+
+// region build
+
+// -------------------------------------
+//   Task: Build Composer
+// -------------------------------------
+gulp.task('build-composer', function (cb) {
+  var options = {
+    dryRun: false,
+    silent: false,
+    cwd: './src'
+  };
+  execute(
+    'composer install',
+    options,
+    cb
+  );
+});
+
+// -------------------------------------
+//   Task: Build Bower
+// -------------------------------------
+gulp.task('build-bower', function (cb) {
+  var options = {
+    dryRun: false,
+    silent: false,
+    cwd: './src'
+  };
+  execute(
+    'bower install',
+    options,
+    cb
+  );
+});
+
+// -------------------------------------
+//   Task: Build Upload to destination
+// -------------------------------------
+gulp.task('build-upload', function (cb) {
+  var params = require('yargs')
+    .option('dest', {
+      demand: true,
+      type: 'string' })
+    .option('uploadCredentials', {
+      demand: true,
+      type: 'string' })
+    .argv;
+  var options = {
+    dryRun: false,
+    silent: false,
+    includeFile: 'upload-include.txt',  // read include patterns from FILE
+    excludeFile: 'upload-exclude.txt',  // read exclude patterns from FILE
+    rsh: '--rsh="ssh -v -i ' + params.uploadCredentials + '"',
+    src: 'src/',
+    dest: path.join(params.dest, 'htdocs')
+  };
+
+  execute(
+    'rsync -progzlt --chmod=Dug=rwx,Fug=rw,o-rwx ' +
+    '--delete-during --stats --rsync-path="sudo rsync" <%= rsh %> ' +
+    '--include-from="<%= includeFile %>" ' +
+    '--exclude-from="<%= excludeFile %>" ' +
+    '<%= src %> <%= dest %>',
+    options,
+    cb
+  );
+
+  // For E2E tests, upload test dir to destination
+  if (params.dest.includes('e2etest')) {
+    options.src = 'test/';
+    options.dest = path.join(params.dest, '/test');
+
+    execute(
+      'rsync -progzlt --chmod=Dug=rwx,Fug=rw,o-rwx ' +
+      '--delete-during --stats --rsync-path="sudo rsync" <%= rsh %> ' +
+      '<%= src %> <%= dest %> --exclude php',
+      options,
+      cb
+    );
+  }
+});
+
+// -------------------------------------
+//   Task: Build (General)
+// -------------------------------------
+gulp.task('build',
+  gulp.series(
+    gulp.parallel(
+      'build-composer',
+      'build-bower'),
+    'less')
+);
+
+// -------------------------------------
+//   Task: Build and Upload to destination
+// -------------------------------------
+gulp.task('build-and-upload',
+  gulp.series(
+    'build',
+    'build-upload',
+    'test-restart-webserver')
+);
+
+// endregion build
+
+gulp.task('default', gulp.series('build'));
