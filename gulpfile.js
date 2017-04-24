@@ -152,7 +152,20 @@ gulp.task('test-php-startServer', function(cb) {
   );
 });
 
-gulp.task('test-php', function() {
+gulp.task('test-php-setupTestEnvironment', function (cb) {
+  var options = {
+    dryRun: false,
+    silent: false
+  };
+  execute(
+    'mysql languagedepot < tests/testlanguagedepot.sql;' +
+    'mysql languagedepotpvt < tests/testlanguagedepot.sql',
+    options,
+    cb
+  );
+});
+
+gulp.task('test-php-run', function() {
   var src = 'tests/phpunit.xml';
   var params = require('yargs')
     .option('debug', {
@@ -181,7 +194,13 @@ gulp.task('test-php', function() {
   return gulp.src(src)
     .pipe(phpunit('src/vendor/bin/phpunit', options));
 });
-gulp.task('test-php').description = 'API and Unit tests';
+gulp.task('test-php-run').description = 'run API and Unit tests';
+
+gulp.task('test-php',
+  gulp.series(
+    'test-php-setupTestEnvironment',
+    'test-php-run')
+);
 
 gulp.task('watch', function() {
   gulp.watch([paths.src_api, paths.test], ['test']);
