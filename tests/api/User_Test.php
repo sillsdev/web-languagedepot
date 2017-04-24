@@ -58,13 +58,13 @@ class UserTest extends PHPUnit_Framework_TestCase
         $result = json_decode($result);
 
         $expected0 = new \stdclass;
-        $expected0->identifier = 'testpal-dictionary';
-        $expected0->name = 'Test Palaso';
+        $expected0->identifier = 'tpi-dictionary';
+        $expected0->name = 'LD Test TokPisin';
         $expected0->repository = 'http://public.languagedepot.org';
         $expected0->role = 'contributor';
         $expected1 = new \stdclass;
-        $expected1->identifier = 'lwl2';
-        $expected1->name = 'Eastern Lawa';
+        $expected1->identifier = 'test-th-flex';
+        $expected1->name = 'LD API Test Flex';
         $expected1->repository = 'http://public.languagedepot.org';
         $expected1->role = 'manager';
         $expected = array($expected0, $expected1);
@@ -90,8 +90,8 @@ class UserTest extends PHPUnit_Framework_TestCase
         $result = json_decode($result);
 
         $expected0 = new \stdclass;
-        $expected0->identifier = 'lwl2';
-        $expected0->name = 'Eastern Lawa';
+        $expected0->identifier = 'test-th-flex';
+        $expected0->name = 'LD API Test Flex';
         $expected0->repository = 'http://public.languagedepot.org';
         $expected0->role = 'manager';
         $expected = array($expected0);
