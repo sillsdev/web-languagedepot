@@ -32,14 +32,14 @@ class ProjectTest extends PHPUnit_Framework_TestCase
         $expected = new \stdclass();
         $expected->id = $id;
         $expected->name = 'LD API Test Flex';
-        $expected->description = 'LD API Test project of random Flex';
+        $expected->description = 'LD API Test FLEx project';
         $expected->homepage = '';
         $expected->is_public = 1;
         $expected->parent_id = null;
         $expected->projects_count = 0;
-        $expected->created_on = '2009-09-21T02:44:47+0700';
-        $expected->updated_on = '2009-09-21T02:44:47+0700';
-        $expected->identifier = 'test-th-flex';
+        $expected->created_on = '2012-09-21T02:44:47+0700';
+        $expected->updated_on = '2017-02-24T02:44:47+0700';
+        $expected->identifier = 'test-ld-flex';
         $expected->status = 1;
 
         $this->assertEquals($expected, $result);
@@ -71,15 +71,15 @@ class ProjectTest extends PHPUnit_Framework_TestCase
 
         $expected = new \stdclass();
         $expected->id = 1;
-        $expected->name = 'test';
-        $expected->description = '';
+        $expected->name = 'LD Test';
+        $expected->description = 'LD API Test project';
         $expected->homepage = '';
         $expected->is_public = 0;
         $expected->parent_id = null;
         $expected->projects_count = 0;
         $expected->created_on = '2009-07-23T09:56:52+0700';
-        $expected->updated_on = '2009-07-23T09:56:52+0700';
-        $expected->identifier = 'test';
+        $expected->updated_on = '2017-02-24T09:56:52+0700';
+        $expected->identifier = 'ld-test';
         $expected->status = 1;
 
         $this->assertEquals($expected, $result);
@@ -88,7 +88,7 @@ class ProjectTest extends PHPUnit_Framework_TestCase
     public function testProjectCodeExists_CodeExists_False() {
         $client = ApiTestEnvironment::client();
 
-        $existingProjectCode = 'tpi-dictionary';
+        $existingProjectCode = 'test-ld-dictionary';
 
         $response = $client->get('/api/project/exists/' . $existingProjectCode, array(
             'headers' => ApiTestEnvironment::headers()

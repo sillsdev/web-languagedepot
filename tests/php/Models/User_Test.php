@@ -36,8 +36,8 @@ class UserModelTest extends PHPUnit_Framework_TestCase
         $projects = $user->projects;
         $c = count($projects);
         $this->assertEquals(2, $c);
-        $this->assertEquals('tpi-dictionary', $projects[0]->identifier);
-        $this->assertEquals('test-th-flex', $projects[1]->identifier);
+        $this->assertEquals('test-ld-dictionary', $projects[0]->identifier);
+        $this->assertEquals('test-ld-flex', $projects[1]->identifier);
     }
 
 }

@@ -23,7 +23,7 @@ grant all on *.* to 'test'@'localhost';
 quit
 ```
 
-Restore from command prompt
+Optional step if you have live site backups *languagedepot.sql* and *languagedepotpvt.sql* to restore into local environment:
 ```
 mysql languagedepot < languagedepot.sql
 mysql languagedepotpvt < languagedepotpvt.sql
@@ -94,12 +94,12 @@ Select *Default configuration file* and browse to `web-languageforge-api/tests/p
 Select *Default bootstrap file* and browse to `web-languageforge-api/tests/TestConfig.php`
 
 #### Running the tests ####
-In a terminal, `gulp test-php`.
+In a terminal, `gulp test-php`.  This will setup a test environment and run the tests.
 
 To test with debug info `gulp test-php --debug true`
 
 To test with code coverage `gulp test-php --coverage true`.  
-This will generate test coverage report in `tests/CodeCoverage/index.html`. 
+This will generate test coverage report in `tests/CodeCoverage/api/index.html`. 
 
 To run tests in PhpStorm, browse to the project view, right-click `tests` folder and select `Run 'tests'`.
 
