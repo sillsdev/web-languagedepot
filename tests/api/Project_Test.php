@@ -27,6 +27,8 @@ class ProjectTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('200', $response->getStatusCode());
         $result = $response->getBody();
         $result = json_decode($result);
+        $result->created_on = ApiTestEnvironment::StripTimeZone($result->created_on);
+        $result->updated_on = ApiTestEnvironment::StripTimeZone($result->updated_on);
 
         $expected = new \stdclass();
         $expected->id = $id;
@@ -36,8 +38,8 @@ class ProjectTest extends PHPUnit_Framework_TestCase
         $expected->is_public = 1;
         $expected->parent_id = null;
         $expected->projects_count = 0;
-        $expected->created_on = '2012-09-21T02:44:47+0700';
-        $expected->updated_on = '2017-02-24T02:44:47+0700';
+        $expected->created_on = '2012-09-21T02:44:47';
+        $expected->updated_on = '2017-02-24T02:44:47';
         $expected->identifier = 'test-ld-flex';
         $expected->status = 1;
 
@@ -67,6 +69,8 @@ class ProjectTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('200', $response->getStatusCode());
         $result = $response->getBody();
         $result = json_decode($result);
+        $result->created_on = ApiTestEnvironment::StripTimeZone($result->created_on);
+        $result->updated_on = ApiTestEnvironment::StripTimeZone($result->updated_on);
 
         $expected = new \stdclass();
         $expected->id = 1;
@@ -76,8 +80,8 @@ class ProjectTest extends PHPUnit_Framework_TestCase
         $expected->is_public = 0;
         $expected->parent_id = null;
         $expected->projects_count = 0;
-        $expected->created_on = '2009-07-23T09:56:52+0700';
-        $expected->updated_on = '2017-02-24T09:56:52+0700';
+        $expected->created_on = '2009-07-23T09:56:52';
+        $expected->updated_on = '2017-02-24T09:56:52';
         $expected->identifier = 'ld-test';
         $expected->status = 1;
 

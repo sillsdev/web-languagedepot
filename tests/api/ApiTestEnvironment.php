@@ -4,6 +4,15 @@ use GuzzleHttp\Client;
 
 class ApiTestEnvironment
 {
+    /**
+     * @param string $time
+     * @return string
+     */
+    public static function StripTimeZone($time)
+    {
+        return strstr($time, '+', true) ?: $time;
+    }
+
     public static function url(){
         return 'http://api.languagedepot.local';
     }
