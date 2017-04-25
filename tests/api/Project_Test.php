@@ -1,16 +1,15 @@
 <?php
-use GuzzleHttp\Client;
+
 //use PHPUnit_Framework_TestCase;
 
 class ProjectTest extends PHPUnit_Framework_TestCase
 {
-
     public function testPublicRead_Ok()
     {
         $client = ApiTestEnvironment::client();
 
         // List
-        $response = $client->get('/api/project', array(
+        $response = $client->get(ApiTestEnvironment::url().'/api/project', array(
             'headers' => ApiTestEnvironment::headers()
         ));
         $this->assertEquals('200', $response->getStatusCode());
@@ -22,7 +21,7 @@ class ProjectTest extends PHPUnit_Framework_TestCase
 
         // Get by id
         $id = 3;
-        $response = $client->get('/api/project/' . $id, array(
+        $response = $client->get(ApiTestEnvironment::url().'/api/project/' . $id, array(
             'headers' => ApiTestEnvironment::headers()
         ));
         $this->assertEquals('200', $response->getStatusCode());
@@ -50,7 +49,7 @@ class ProjectTest extends PHPUnit_Framework_TestCase
         $client = ApiTestEnvironment::client();
 
         // List
-        $response = $client->get('/api/project/private', array(
+        $response = $client->get(ApiTestEnvironment::url().'/api/project/private', array(
             'headers' => ApiTestEnvironment::headers()
         ));
         $this->assertEquals('200', $response->getStatusCode());
@@ -62,7 +61,7 @@ class ProjectTest extends PHPUnit_Framework_TestCase
 
         // Get by id
         $id = 1;
-        $response = $client->get('/api/project/private/' . $id, array(
+        $response = $client->get(ApiTestEnvironment::url().'/api/project/private/' . $id, array(
             'headers' => ApiTestEnvironment::headers()
         ));
         $this->assertEquals('200', $response->getStatusCode());
@@ -90,7 +89,7 @@ class ProjectTest extends PHPUnit_Framework_TestCase
 
         $existingProjectCode = 'test-ld-dictionary';
 
-        $response = $client->get('/api/project/exists/' . $existingProjectCode, array(
+        $response = $client->get(ApiTestEnvironment::url().'/api/project/exists/' . $existingProjectCode, array(
             'headers' => ApiTestEnvironment::headers()
         ));
         $this->assertEquals('200', $response->getStatusCode());
@@ -105,7 +104,7 @@ class ProjectTest extends PHPUnit_Framework_TestCase
 
         $nonexistentProjectCode = 'ran4domproj6543';
 
-        $response = $client->get('/api/project/exists/' . $nonexistentProjectCode, array(
+        $response = $client->get(ApiTestEnvironment::url().'/api/project/exists/' . $nonexistentProjectCode, array(
             'headers' => ApiTestEnvironment::headers()
         ));
         $this->assertEquals('200', $response->getStatusCode());
