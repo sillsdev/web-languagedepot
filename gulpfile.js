@@ -324,6 +324,19 @@ gulp.task('build-and-upload',
     'test-restart-webserver')
 );
 
+// -------------------------------------
+//   Task: Build, PHP Tests, Upload
+// -------------------------------------
+gulp.task('build-php',
+  gulp.series(
+    'build',
+    'test-php',
+    'build-upload',
+    'test-restart-webserver')
+);
+gulp.task('build-php').description =
+  'Build and Run PHP tests on CI server; Deploy to dev site';
+
 // endregion build
 
 gulp.task('default', gulp.series('build'));
