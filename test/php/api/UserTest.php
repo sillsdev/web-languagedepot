@@ -58,7 +58,7 @@ class UserTest extends PHPUnit_Framework_TestCase
 
         $expected0 = new \stdclass;
         $expected0->identifier = 'test-ld-dictionary';
-        $expected0->name = 'LD Test Dictionary';
+        $expected0->name = 'LD Test Dictioñary';
         $expected0->repository = 'http://public.languagedepot.org';
         $expected0->role = 'contributor';
         $expected1 = new \stdclass;
@@ -66,7 +66,12 @@ class UserTest extends PHPUnit_Framework_TestCase
         $expected1->name = 'LD API Test Flex';
         $expected1->repository = 'http://public.languagedepot.org';
         $expected1->role = 'manager';
-        $expected = array($expected0, $expected1);
+        $expected2 = new \stdclass;
+        $expected2->identifier = 'test-ld-demo';
+        $expected2->name = 'LD API Test Demo';
+        $expected2->repository = 'http://public.languagedepot.org';
+        $expected2->role = 'unknown'; // languagedepotprogrammer
+        $expected = array($expected0, $expected1, $expected2);
         $this->assertEquals($expected, $result);
     }
 
