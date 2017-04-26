@@ -27,10 +27,7 @@
     </php>
     <testsuites>
         <testsuite name="admin.languagedepot.org API Test Suite">
-            <directory>./api</directory>
-        </testsuite>
-        <testsuite name="admin.languagedepot.org Unit Test Suite">
-            <directory>./php</directory>
+            <directory>./</directory>
         </testsuite>
     </testsuites>
     <groups>
@@ -40,7 +37,7 @@
     </groups>
     <filter>
         <whitelist processUncoveredFilesFromWhitelist="true">
-            <directory suffix=".php">../src/api</directory>
+            <directory suffix=".php">../../src/api</directory>
         </whitelist>
     </filter>
 </phpunit>

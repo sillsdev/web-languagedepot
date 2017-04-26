@@ -1,17 +1,17 @@
 <?php
 
-$rootPath = realpath(__DIR__ . '/..') . DIRECTORY_SEPARATOR;
+$rootPath = realpath(__DIR__ . '/../..') . DIRECTORY_SEPARATOR;
 
 if (! defined('SRC_PATH')) {
     define('SRC_PATH', $rootPath . 'src/');
 }
 
 if (!defined('TEST_PATH')) {
-    define('TEST_PATH', $rootPath . 'tests/php/');
+    define('TEST_PATH', $rootPath . 'test/php/');
 }
 
 if (!defined('API_TEST_PATH')) {
-    define('API_TEST_PATH', $rootPath . 'tests/api/');
+    define('API_TEST_PATH', $rootPath . 'test/php/api/');
 }
 
 require_once (SRC_PATH . '/Config.php');

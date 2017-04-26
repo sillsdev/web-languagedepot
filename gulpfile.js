@@ -55,7 +55,7 @@ var paths = {
   src_ng: ['src/app-ng/**/*.js', 'src/app-ng/**/*.html', 'src/assets/*'],
   src_less: ['src/app-ng/**/*.less'],
   src_api: ['src/api/**/*.php'],
-  test: ['tests/**/*.php']
+  test: ['test/**/*.php']
 };
 
 gulp.task('do-reload', function() {
@@ -139,11 +139,12 @@ gulp.task('less', function() {
 gulp.task('test-php-setupTestEnvironment', function (cb) {
   var options = {
     dryRun: false,
-    silent: false
+    silent: false,
+    sqlFile: 'test/testlanguagedepot.sql'
   };
   execute(
-    'mysql languagedepot < tests/testlanguagedepot.sql;' +
-    'mysql languagedepotpvt < tests/testlanguagedepot.sql',
+    'mysql languagedepot < <%= sqlFile %>; ' +
+    'mysql languagedepotpvt < <%= sqlFile %>',
     options,
     cb
   );
@@ -153,7 +154,7 @@ gulp.task('test-php-setupTestEnvironment', function (cb) {
 //   Task: test-php-run
 // -------------------------------------
 gulp.task('test-php-run', function() {
-  var src = 'tests/phpunit.xml';
+  var src = 'test/php/phpunit.xml';
   var params = require('yargs')
     .option('debug', {
       demand: false,
@@ -174,7 +175,7 @@ gulp.task('test-php-run', function() {
     delete options.logJunit;
   }
   if (params.coverage) {
-    options.coverageHtml = 'tests/CodeCoverage/api';
+    options.coverageHtml = 'test/CodeCoverage/php';
   }
 
   gutil.log("##teamcity[importData type='junit' path='PhpUnitTests.xml']");

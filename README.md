@@ -77,7 +77,7 @@ In the **src** folder: `composer install`
 
 ## Testing ##
 
-### PHP API and Unit Tests ###
+### PHP API Unit Tests ###
 
 Unit testing currently uses [PHPUnit](https://phpunit.de/) which was already installed by composer.
 
@@ -89,9 +89,9 @@ Under PHPUnit Library, select `Use Composer autoloader` option
 For `Path to script` browse to `web-languageforge-api/src/vendor/autoload.php`
 
 Under Test Runner
-Select *Default configuration file* and browse to `web-languageforge-api/tests/phpunit.xml`
+Select *Default configuration file* and browse to `web-languageforge-api/test/php/phpunit.xml`
 
-Select *Default bootstrap file* and browse to `web-languageforge-api/tests/TestConfig.php`
+Select *Default bootstrap file* and browse to `web-languageforge-api/test/php/TestConfig.php`
 
 #### Running the tests ####
 In a terminal, `gulp test-php`.  This will setup a test environment and run the tests.
@@ -99,9 +99,9 @@ In a terminal, `gulp test-php`.  This will setup a test environment and run the 
 To test with debug info `gulp test-php --debug true`
 
 To test with code coverage `gulp test-php --coverage true`.  
-This will generate test coverage report in `tests/CodeCoverage/api/index.html`. 
+This will generate test coverage report in `test/CodeCoverage/php/index.html`. 
 
-To run tests in PhpStorm, browse to the project view, right-click `tests` folder and select `Run 'tests'`.
+To run tests in PhpStorm, browse to the project view, right-click `test` folder and select `Run 'test'`.
 
 ## Language Depot Stats ##
 
