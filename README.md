@@ -14,8 +14,8 @@ When prompted, set the default password to '*password*'.
 Create the users, databases and grant all privileges to local user.  Replace `<USER>` with your username.
 ```
 mysql -u root -p
-create database languagedepot;
-create database languagedepotpvt;
+CREATE DATABASE languagedepot CHARACTER SET UTF8 ;
+CREATE DATABASE languagedepotpvt CHARACTER SET UTF8;
 create user '<USER>'@'localhost';
 grant all on *.* to '<USER>'@'localhost';
 create user 'test'@'localhost' identified by 'test';

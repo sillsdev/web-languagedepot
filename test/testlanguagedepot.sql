@@ -13,8 +13,7 @@ SET time_zone = "+00:00";
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
--- Should this be utf8mb4?
+/*!40101 SET NAMES utf8mb4 */;
 /*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
 /*!40103 SET TIME_ZONE='+00:00' */;
 /*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
@@ -760,7 +759,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `login`, `hashed_password`, `firstname`, `lastname`, `mail`, `mail_notification`, `admin`, `status`, `last_login_on`, `language`, `auth_source_id`, `created_on`, `updated_on`, `type`) VALUES
-(1, 'admin', '5857a28060d630a5ed9e0bfd4e6e17a76fa41b79', 'Admin', 'User', 'manager@example.net', 0, 1, 1, '2009-07-23 08:44:48', 'en', NULL, '2009-07-22 06:32:07', '2009-07-23 08:45:37', NULL),
+(1, 'admin', '5857a28060d630a5ed9e0bfd4e6e17a76fa41b79', 'Admin', 'User', 'admin@example.net', 0, 1, 1, '2009-07-23 08:44:48', 'en', NULL, '2009-07-22 06:32:07', '2009-07-23 08:45:37', NULL),
 (10, 'manager1', 'bc852d2e71e76cf734e3a4b74619bc28d867c8bd', 'Manager1', 'User', 'manager1@example.net', 0, 0, 1, '2009-07-23 08:44:48', 'en', NULL, '2009-07-22 06:32:07', '2009-07-23 08:45:37', NULL),
 (11, 'manager2', '5857a28060d630a5ed9e0bfd4e6e17a76fa41b79', 'Manager2', 'User', 'manager2@example.net', 0, 0, 1, '2009-07-23 08:44:48', 'en', NULL, '2009-07-22 06:32:07', '2009-07-23 08:45:37', NULL),
 (20, 'user1', '02484720fe235a6fa352ffa0d5dac80897008ec0', 'User', 'One', 'user1@example.net', 0, 0, 1, '2015-10-16 09:08:39', 'en', NULL, '2009-07-23 08:40:51', '2015-10-16 09:08:39', NULL),
