@@ -39,7 +39,7 @@ class UserController
         } else {
             $conditions = array('user_id = ?', $user->id);
         }
-        
+
         $projects = Project::find('all', array(
             'joins' => array('members'),
             'select' => 'projects.identifier,projects.name,members.user_id,members.role_id',
@@ -61,9 +61,9 @@ class UserController
                 default:
                     $o->role = 'unknown';
             }
-        
+
             $result[] = $o;
-        
+
         }
         return new JsonResponse($result, 200);
     }

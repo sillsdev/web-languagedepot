@@ -13,8 +13,7 @@ SET time_zone = "+00:00";
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
--- Should this be utf8mb4?
+/*!40101 SET NAMES utf8mb4 */;
 /*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
 /*!40103 SET TIME_ZONE='+00:00' */;
 /*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
@@ -442,7 +441,8 @@ INSERT INTO `members` (`id`, `user_id`, `project_id`, `role_id`, `created_on`, `
 (4, 170, 2, 4, '2017-01-02 03:04:55', 0),
 (5, 11, 3, 3, '2009-07-27 02:03:33', 0),
 (6, 21, 3, 4, '2009-07-27 02:03:33', 0),
-(7, 170, 3, 3, '2017-01-02 03-04:55', 0);
+(7, 170, 3, 3, '2017-01-02 03-04:55', 0),
+(8, 170, 4, 6, '2017-02-02 04-04:55', 0);
 
 --
 -- Table structure for table `messages`
@@ -533,11 +533,12 @@ CREATE TABLE `projects` (
 
 INSERT INTO `projects` (`id`, `name`, `description`, `homepage`, `is_public`, `parent_id`, `projects_count`, `created_on`, `updated_on`, `identifier`, `status`) VALUES
 (1, 'LD Test', 'LD API Test project', '', 0, NULL, 0, '2009-07-23 09:56:52', '2017-02-24 09:56:52', 'ld-test', 1),
-(2, 'LD Test Dictionary', 'LD API Test Dictionary project', '', 1, NULL, 0, '2011-07-24 05:24:19', '2017-02-24 02:33:33', 'test-ld-dictionary', 1),
+(2, 'LD Test Dictioñary', 'LD API Test Dictionary project', '', 1, NULL, 0, '2011-07-24 05:24:19', '2017-02-24 02:33:33', 'test-ld-dictionary', 1),
 (3, 'LD API Test Flex', 'LD API Test FLEx project', '', 1, NULL, 0, '2012-09-21 02:44:47', '2017-02-24 02:44:47', 'test-ld-flex', 1),
 (4, 'LD API Test Demo', 'LD API Test Demo project', '', 1, NULL, 0, '2013-09-21 02:44:47', '2017-02-24 02:44:47', 'test-ld-demo', 1),
 (5, 'LD API Test AdaptIT', 'LD API Test AdaptIT project', '', 1, NULL, 0, '2014-09-21 02:44:47', '2017-02-24 02:44:47', 'test-ld-adapt', 1),
-(6, 'LD API Test Training', 'LD API Test Training project', '', 1, NULL, 0, '2015-09-21 02:44:47', '2017-02-24 02:44:47', 'test-ld-training', 1);
+(6, 'LD API Test Training', 'LD API Test Training project', '', 1, NULL, 0, '2015-09-21 02:44:47', '2017-02-24 02:44:47', 'test-ld-training', 1),
+(7, 'LD API UTF8 Eñcoding', 'LD API Test UTF8 Eñcoding', '', 0, NULL, 0, '2016-08-10 07:30:45', '2017-03-01 08:10:20', 'test-ld-utf8', 1);
 
 -- --------------------------------------------------------
 
@@ -758,7 +759,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `login`, `hashed_password`, `firstname`, `lastname`, `mail`, `mail_notification`, `admin`, `status`, `last_login_on`, `language`, `auth_source_id`, `created_on`, `updated_on`, `type`) VALUES
-(1, 'admin', '5857a28060d630a5ed9e0bfd4e6e17a76fa41b79', 'Admin', 'User', 'manager@example.net', 0, 1, 1, '2009-07-23 08:44:48', 'en', NULL, '2009-07-22 06:32:07', '2009-07-23 08:45:37', NULL),
+(1, 'admin', '5857a28060d630a5ed9e0bfd4e6e17a76fa41b79', 'Admin', 'User', 'admin@example.net', 0, 1, 1, '2009-07-23 08:44:48', 'en', NULL, '2009-07-22 06:32:07', '2009-07-23 08:45:37', NULL),
 (10, 'manager1', 'bc852d2e71e76cf734e3a4b74619bc28d867c8bd', 'Manager1', 'User', 'manager1@example.net', 0, 0, 1, '2009-07-23 08:44:48', 'en', NULL, '2009-07-22 06:32:07', '2009-07-23 08:45:37', NULL),
 (11, 'manager2', '5857a28060d630a5ed9e0bfd4e6e17a76fa41b79', 'Manager2', 'User', 'manager2@example.net', 0, 0, 1, '2009-07-23 08:44:48', 'en', NULL, '2009-07-22 06:32:07', '2009-07-23 08:45:37', NULL),
 (20, 'user1', '02484720fe235a6fa352ffa0d5dac80897008ec0', 'User', 'One', 'user1@example.net', 0, 0, 1, '2015-10-16 09:08:39', 'en', NULL, '2009-07-23 08:40:51', '2015-10-16 09:08:39', NULL),
