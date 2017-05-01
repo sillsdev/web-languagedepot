@@ -154,7 +154,7 @@ class ProjectControllerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Exception
+     * @expectedException PHPUnit_Framework_Error_Warning
      * @expectedExceptionMessage json
      */
     public function testGet_DescriptionNotUTF8Encoded_Exception() {

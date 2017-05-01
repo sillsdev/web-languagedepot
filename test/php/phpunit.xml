@@ -12,7 +12,6 @@
     forceCoversAnnotation="false"
     mapTestClassNameToCoveredClassName="false"
     processIsolation="false"
-    strict="true"
     stopOnError="false"
     stopOnFailure="false"
     stopOnIncomplete="false"
