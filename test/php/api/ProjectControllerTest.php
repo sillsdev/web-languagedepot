@@ -155,7 +155,7 @@ class ProjectControllerTest extends PHPUnit_Framework_TestCase
 
     /**
      * @expectedException Exception
-     * @expectedExceptionMessage Cannot encode to json
+     * @expectedExceptionMessage json
      */
     public function testGet_DescriptionNotUTF8Encoded_Exception() {
         $controller = new ProjectController();
