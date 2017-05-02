@@ -16,9 +16,9 @@
     "tests"
   ],
   "dependencies": {
-    "angular": "~1.2.x",
-    "angular-route": "~1.2.x",
-    "angular-resource": "~1.2.x",
+    "angular": "~1.5",
+    "angular-route": "~1.5",
+    "angular-resource": "~1.5",
     "angular-ui-bootstrap-bower": "~0.x",
     "d3": "~3.5",
     "nvd3": "~1.8"
