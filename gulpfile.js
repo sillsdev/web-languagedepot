@@ -18,6 +18,7 @@ var webdriverUpdate = require('gulp-protractor').webdriver_update;
 var uglify = require('gulp-uglify');
 var concat = require('gulp-concat');
 var sourcemaps = require('gulp-sourcemaps');
+var path = require('path');
 var livereload = require('gulp-livereload');
 var lr = require('tiny-lr');
 var server = lr();
