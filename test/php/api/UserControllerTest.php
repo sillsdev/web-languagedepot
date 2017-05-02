@@ -74,7 +74,7 @@ class UserControllerTest extends PHPUnit_Framework_TestCase
 
         $expected0 = new \stdclass;
         $expected0->identifier = 'test-ld-dictionary';
-        $expected0->name = 'LD Test Dictioñary';
+        $expected0->name = 'LD Test Dictionary';
         $expected0->repository = 'http://public.languagedepot.org';
         $expected0->role = 'contributor';
         $expected1 = new \stdclass;
@@ -129,7 +129,7 @@ class UserControllerTest extends PHPUnit_Framework_TestCase
 
         $expected0 = new \stdclass;
         $expected0->identifier = 'test-ld-dictionary';
-        $expected0->name = 'LD Test Dictioñary';
+        $expected0->name = 'LD Test Dictionary';
         $expected0->repository = 'http://public.languagedepot.org';
         $expected0->role = 'contributor';
         $expected = array($expected0);

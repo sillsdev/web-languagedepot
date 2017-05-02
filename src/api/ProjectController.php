@@ -30,7 +30,6 @@ class ProjectController
                     'name'
                 )
             ));
-            $asArray['name'] = utf8_encode($asArray['name']);
             $asArray['type'] = $project->type();
             $canEncode = json_encode($asArray);
             if ($canEncode === false) {
@@ -54,7 +53,6 @@ class ProjectController
     {
         $project = Project::find($id);
         $asArray = $project->to_array();
-        $asArray['name'] = utf8_encode($asArray['name']);
         $canEncode = json_encode($asArray);
         if ($canEncode === false) {
             throw new \Exception("Cannot encode to json");
