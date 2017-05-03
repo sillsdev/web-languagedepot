@@ -533,12 +533,12 @@ CREATE TABLE `projects` (
 
 INSERT INTO `projects` (`id`, `name`, `description`, `homepage`, `is_public`, `parent_id`, `projects_count`, `created_on`, `updated_on`, `identifier`, `status`) VALUES
 (1, 'LD Test', 'LD API Test project', '', 0, NULL, 0, '2009-07-23 09:56:52', '2017-02-24 09:56:52', 'ld-test', 1),
-(2, 'LD Test Dictioñary', 'LD API Test Dictionary project', '', 1, NULL, 0, '2011-07-24 05:24:19', '2017-02-24 02:33:33', 'test-ld-dictionary', 1),
+(2, 'LD Test Dictionary', 'LD API Test Dictionary project', '', 1, NULL, 0, '2011-07-24 05:24:19', '2017-02-24 02:33:33', 'test-ld-dictionary', 1),
 (3, 'LD API Test Flex', 'LD API Test FLEx project', '', 1, NULL, 0, '2012-09-21 02:44:47', '2017-02-24 02:44:47', 'test-ld-flex', 1),
 (4, 'LD API Test Demo', 'LD API Test Demo project', '', 1, NULL, 0, '2013-09-21 02:44:47', '2017-02-24 02:44:47', 'test-ld-demo', 1),
 (5, 'LD API Test AdaptIT', 'LD API Test AdaptIT project', '', 1, NULL, 0, '2014-09-21 02:44:47', '2017-02-24 02:44:47', 'test-ld-adapt', 1),
 (6, 'LD API Test Training', 'LD API Test Training project', '', 1, NULL, 0, '2015-09-21 02:44:47', '2017-02-24 02:44:47', 'test-ld-training', 1),
-(7, 'LD API UTF8 Eñcoding', 'LD API Test UTF8 Eñcoding', '', 0, NULL, 0, '2016-08-10 07:30:45', '2017-03-01 08:10:20', 'test-ld-utf8', 1);
+(7, 'LD API UTF8 Eñcoding', 'LD API Test UTF8 Eñcoding project', '', 1, NULL, 0, '2016-08-10 07:30:45', '2017-03-01 08:10:20', 'test-ld-ütf8', 1);
 
 -- --------------------------------------------------------
 

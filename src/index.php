@@ -20,8 +20,8 @@ $app->register(new TwigServiceProvider(), array(
 $app->register(new ActiveRecordServiceProvider(), array(
     'ActiveRecord.modelPath' => __DIR__ . '/api/Models',
     'ActiveRecord.connections' => array(
-        'public' => 'mysql://' . DB_USER . ':' . DB_PASS . '@localhost/languagedepot',
-        'private' => 'mysql://' . DB_USER . ':' . DB_PASS . '@localhost/languagedepotpvt'
+        'public' => 'mysql://' . DB_USER . ':' . DB_PASS . '@localhost/languagedepot;charset=utf8',
+        'private' => 'mysql://' . DB_USER . ':' . DB_PASS . '@localhost/languagedepotpvt;charset=utf8'
     ),
     'ActiveRecord.defaultConnection' => 'public'
 ));

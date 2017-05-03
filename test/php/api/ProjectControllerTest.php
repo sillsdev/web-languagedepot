@@ -127,11 +127,11 @@ class ProjectControllerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testGetProjectAccess_ProjectNameUTF8Encoded_OK() {
+    public function testGetProjectAccess_FieldsUTF8Encoded_OK() {
         $controller = new ProjectController();
 
         // Get by id
-        $id = '2';
+        $id = '7';
         $result = $controller->get($id);
         $result = json_decode($result);
         $result->created_on = ApiTestEnvironment::StripTimeZone($result->created_on);
@@ -139,30 +139,18 @@ class ProjectControllerTest extends PHPUnit_Framework_TestCase
 
         $expected = new \stdclass();
         $expected->id = $id;
-        $expected->name = 'LD Test Dictioñary';
-        $expected->description = 'LD API Test Dictionary project';
+        $expected->name = 'LD API UTF8 Eñcoding';
+        $expected->description = 'LD API Test UTF8 Eñcoding project';
         $expected->homepage = '';
         $expected->is_public = 1;
         $expected->parent_id = null;
         $expected->projects_count = 0;
-        $expected->created_on = '2011-07-24T05:24:19';
-        $expected->updated_on = '2017-02-24T02:33:33';
-        $expected->identifier = 'test-ld-dictionary';
+        $expected->created_on = '2016-08-10T07:30:45';
+        $expected->updated_on = '2017-03-01T08:10:20';
+        $expected->identifier = 'test-ld-ütf8';
         $expected->status = 1;
 
         $this->assertEquals($expected, $result);
-    }
-
-    /**
-     * @expectedException PHPUnit_Framework_Error_Warning
-     * @expectedExceptionMessage json
-     */
-    public function testGet_DescriptionNotUTF8Encoded_Exception() {
-        $controller = new ProjectController();
-
-        // Get by id
-        $id = 7;
-        $result = $controller->get($id);
     }
 
     public function testProjectCodeIsAvailable_CodeExists_False() {
