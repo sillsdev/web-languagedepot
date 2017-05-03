@@ -259,6 +259,20 @@ gulp.task('build-bower', function (cb) {
 });
 
 // -------------------------------------
+//   Task: Change Group to www-data
+// -------------------------------------
+gulp.task('build-changeGroup', function (cb) {
+  execute(
+    'sudo chgrp -R www-data src; sudo chgrp -R www-data test; ',
+    null,
+    cb
+  );
+});
+
+gulp.task('build-changeGroup').description =
+  'Ensure www-data is the group for src and test folder';
+
+// -------------------------------------
 //   Task: Build Upload to destination
 // -------------------------------------
 gulp.task('build-upload', function (cb) {
@@ -313,7 +327,8 @@ gulp.task('build',
     gulp.parallel(
       'build-composer',
       'build-bower'),
-    'less')
+    'less',
+    'build-changeGroup')
 );
 
 // -------------------------------------
