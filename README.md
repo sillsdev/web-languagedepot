@@ -52,28 +52,14 @@ ansible-playbook -i hosts playbook_create_config.yml --limit localhost -K
 ansible-playbook -i hosts playbook_xenial.yml --limit localhost -K
 ````
 
-Install node_modules used to build Less files and run E2E tests
+Install `node_modules` used to build *Less* files and be able to run E2E tests
 ```
 cd ..
 npm install
 gulp less
 ```
 
-## Updating dependencies ##
-
-Occasionally developers need to update composer, bower or npm.  If something isn't working after a recent code change, try updating the dependencies:
-
-#### Update npm packages ####
-
-In the **root** folder: `npm install`
-
-#### Update bower ####
-
-In the **src** folder: `bower install`
-
-#### Update composer ####
-
-In the **src** folder: `composer install`
+If you don't have live site backups, running the unit tests (below) will populate the MySQL database with some data (which is needed for the site to work).
 
 ## Testing ##
 
@@ -81,7 +67,7 @@ In the **src** folder: `composer install`
 
 Unit testing currently uses [PHPUnit](https://phpunit.de/) which was already installed by composer.
 
-#### Integrating PHPUnit with PhpStorm ####
+#### Integrating PHPUnit with PhpStorm (optional) ####
 
 **File** -> **Settings** -> **Languages & Frameworks** -> **PHP** -> **PHPUnit**
 
@@ -101,7 +87,23 @@ To test with debug info `gulp test-php --debug true`
 To test with code coverage `gulp test-php --coverage true`.  
 This will generate test coverage report in `test/CodeCoverage/php/index.html`. 
 
-To run tests in PhpStorm, browse to the project view, right-click `test` folder and select `Run 'test'`.
+To run tests in PhpStorm, browse to the project view, right-click `test/php` folder and select `Run 'php'`.
+
+## Updating dependencies ##
+
+Occasionally developers need to update composer, bower or npm.  If something isn't working after a recent code change, try updating the dependencies:
+
+#### Update npm packages ####
+
+In the **root** folder: `npm install`
+
+#### Update bower ####
+
+In the **src** folder: `bower install`
+
+#### Update composer ####
+
+In the **src** folder: `composer install`
 
 ## Language Depot Stats ##
 
