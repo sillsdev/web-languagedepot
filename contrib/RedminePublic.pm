@@ -50,7 +50,7 @@ Authen::Simple::LDAP (and IO::Socket::SSL if LDAPS is used):
 
      PerlAccessHandler Apache::Authn::Redmine::access_handler
      PerlAuthenHandler Apache::Authn::Redmine::authen_handler
-  
+
      ## for mysql
      PerlSetVar dsn DBI:mysql:database=databasename;host=my.db.server
      ## for postgres
@@ -131,10 +131,10 @@ sub access_handler {
 
 sub authen_handler {
   my $r = shift;
-  
+
   my ($res, $redmine_pass) =  $r->get_basic_auth_pw();
   return $res unless $res == OK;
-  
+
   if (is_lf_server($r) or is_test_project($r) or is_member($r->user, $redmine_pass, $r)) {
       return OK;
   } else {
@@ -146,8 +146,12 @@ sub authen_handler {
 sub is_lf_server {
     my $resource = shift;
     my $connection = $resource->connection;
-    my $client_ip = $connection->client_ip();
-    if ($client_ip eq "216.151.221.183") {
+
+# use this for later versions of mod_perl
+#    my $client_ip = $connection->client_ip();
+
+    my $client_ip = $connection->remote_ip();
+    if ($client_ip eq "127.0.0.1") {
         return 1;
     }
     return 0;
@@ -242,7 +246,7 @@ sub is_member {
 
 sub get_project_identifier {
     my $r = shift;
-    
+
     my $location = $r->location;
     my ($identifier) = $r->uri =~ m{$location/*([^/]+)};
     $identifier;

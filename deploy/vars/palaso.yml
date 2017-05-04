@@ -4,10 +4,12 @@ php_log_folder: /var/log/php
 repo_path: "{{local_dir.stdout | dirname | realpath}}"
 
 apache_module_enable:
-  - rewrite
-  - ssl
+  - cgi
+  - perl
   - proxy
   - proxy_http
+  - rewrite
+  - ssl
 
 apache_site_enable:
   - languagedepot_org.conf
@@ -38,3 +40,29 @@ apache_vhosts:
         server_alias:
           - api.languagedepot.local
           - admin.languagedepot.local
+  - server_name: hg-public.languagedepot.org
+    server_admin: webmaster@palaso.org
+    server_file_name: languagedepot_org_hg-public
+    document_root: /var/www/languagedepot.org_hg-public/htdocs
+    template: vhost_ssl.conf.j2
+#    template: vhost_perl_ssl.conf.j2
+    virtual_hosts:
+      - has_ssl: false
+        port: 80
+        server_alias:
+          - hg-public.languagedepot.local
+        extra:
+          - "LimitRequestLine 16330"
+          - "ScriptAliasMatch ^(.*) /var/www/languagedepot.org_hg-public/cgi-bin/hgwebdir.cgi$1"
+#          - "PerlRequire /var/www/languagedepot.org_hg-public/contrib/RedminePublic.pm"
+#        has_cgi: true
+#        auth_location:
+#          location: "/"
+#          auth_type: "Basic"
+#          auth_name: "Language Depot Public Repository"
+#          extra:
+#            - 'PerlAccessHandler Apache::Authn::RedminePublic::access_handler'
+#            - 'PerlAuthenHandler Apache::Authn::RedminePublic::authen_handler'
+#            - 'PerlSetVar dsn "DBI:mysql:database=languagedepot;host=localhost"'
+#            - 'PerlSetVar db_user test'
+#            - 'PerlSetVar db_pass tset23'

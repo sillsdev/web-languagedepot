@@ -11,6 +11,10 @@
       register: local_dir
       when: inventory_hostname == "localhost"
     - include_vars: "vars/{{ deploy }}.yml"
+    - name: install packages needed for roles
+      apt: name="{{item}}" state=present
+      with_items:
+        - libapache2-mod-perl2
   roles:
     - fix
     # locale_install may be needed if locale has been changed away from defaults
@@ -58,3 +62,4 @@
         - "languagedepot.local"
         - "api.languagedepot.local"
         - "admin.languagedepot.local"
+        - "hg-public.languagedepot.local"

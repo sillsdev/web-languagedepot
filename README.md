@@ -48,8 +48,8 @@ Run the following Ansible playbooks to configure Ansible and run the site.
 
 ````
 cd web-languagedepot-api/deploy
-ansible-playbook -i hosts playbook_create_config.yml --limit localhost -K
-ansible-playbook -i hosts playbook_xenial.yml --limit localhost -K
+ansible-playbook -i hosts playbook_create_config.yml --limit localhost
+ansible-playbook playbook_xenial.yml --limit localhost -K
 ````
 
 Install `node_modules` used to build *Less* files and be able to run E2E tests
@@ -60,6 +60,21 @@ gulp less
 ```
 
 If you don't have live site backups, running the unit tests (below) will populate the MySQL database with some data (which is needed for the site to work).
+
+To enable **hg-public.languagedepot.local**
+```
+sudo ln -s "$(pwd)/contrib" /var/www/languagedepot.org_hg-public/contrib
+sudo ln -s "$(pwd)/cgi-bin" /var/www/languagedepot.org_hg-public/cgi-bin
+sudo a2ensite languagedepot_org_hg-public.conf
+sudo service apache2 reload
+```
+
+To add a **VCS** Mecurial repository with `<Identifier>` for testing
+```
+cd /var/vcs/public
+sudo hg clone http://hg-public.qa.languagedepot.org/<Identifier>
+sudo chown www-data:www-data -R /var/vcs/public
+```
 
 ## Testing ##
 
