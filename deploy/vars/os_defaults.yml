@@ -8,3 +8,4 @@ dependencies_packages:
   - php5-mysql
   - php5-gd
   - php5-cli
+  - mercurial

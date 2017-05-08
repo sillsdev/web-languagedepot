@@ -51,6 +51,15 @@
         - pdo_mysql
       notify: Restart apache
 
+    - name: cache folder exists
+      file: path={{cache_path}} state=directory owner=www-data group=www-data mode=0775 recurse=yes
+
+    - name: VCS folder exists
+      file: path={{vcs_path}} state=directory owner=www-data group=www-data mode=0775 recurse=yes
+
+    - name: resumable API folder exists
+      file: path={{resumable_api_path}} state=directory owner=www-data group=www-data mode=0775 recurse=yes
+
     - name: add host aliases
       lineinfile:
         dest: /etc/hosts
@@ -63,3 +72,4 @@
         - "api.languagedepot.local"
         - "admin.languagedepot.local"
         - "hg-public.languagedepot.local"
+        - "resumable.languagedepot.local"

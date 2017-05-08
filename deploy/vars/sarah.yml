@@ -8,3 +8,5 @@ dependencies_packages:
   - php7.0-mysql
   - php7.0-gd
   - php7.0-cli
+  - php7.0-zip
+  - mercurial

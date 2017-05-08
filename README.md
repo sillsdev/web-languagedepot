@@ -4,7 +4,11 @@
 
 Our recommended development environment for web development is Linux Ubuntu GNOME.
 
-## Manually Install and Configure MySQL ##
+## Local Linux Development Setup ##
+
+Run the Ansible-assisted setup [described here](https://github.com/sillsdev/ops-devbox) to install and configure a basic development environment.
+
+### Manually Install and Configure MySQL ###
 
 ```
 sudo apt-get install mysql-server
@@ -29,39 +33,37 @@ mysql languagedepot < languagedepot.sql
 mysql languagedepotpvt < languagedepotpvt.sql
 ```
 
-### Local Linux Development Setup <a id="LocalSetup"></a>
+### Installation and Deployment ###
+1. If you are developing **hgresume**, clone its repo first [here](https://github.com/sillsdev/hgresume/blob/master/README.md#local-linux-development-setup).
 
-After manually configuring MySQL, run the Ansible-assisted setup [described here](https://github.com/sillsdev/ops-devbox) to install and configure a basic development environment.
+2. Clone this repository. From your *home* folder...
 
-
-#### Installation and Deployment ####
-After creating your Ansible-assisted setup, clone this repository. From your *home* folder...
-
-````
+```
 mkdir src
 cd src
 git clone https://github.com/sillsdev/web-languagedepot-api --recurse-submodules
-````
-The `--recurse-submodules` is used to fetch many of the Ansible roles used by the Ansible playbooks in the deploy folder. If you've already cloned the repo without `--recurse-submodules`, run `git submodule update --init --recursive` to pull and initialize them.
+```
 
-Run the following Ansible playbooks to configure Ansible and run the site.
+  * The `--recurse-submodules` is used to fetch many of the Ansible roles used by the Ansible playbooks in the deploy folder. If you've already cloned the repo without `--recurse-submodules`, run `git submodule update --init --recursive` to pull and initialize them.
 
-````
+3. Run the following Ansible playbooks to configure Ansible and run the site.
+
+```
 cd web-languagedepot-api/deploy
 ansible-playbook -i hosts playbook_create_config.yml --limit localhost
 ansible-playbook playbook_xenial.yml --limit localhost -K
-````
+```
 
-Install `node_modules` used to build *Less* files and be able to run E2E tests
+4. Install `node_modules` used to build *Less* files and be able to run E2E tests
 ```
 cd ..
 npm install
 gulp less
 ```
 
-If you don't have live site backups, running the unit tests (below) will populate the MySQL database with some data (which is needed for the site to work).
+5. If you don't have live site backups, running the unit tests (below) will populate the MySQL database with some data (which is needed for the site to work).
 
-To enable **hg-public.languagedepot.local**
+6. To enable **hg-public.languagedepot.local**
 ```
 sudo ln -s "$(pwd)/contrib" /var/www/languagedepot.org_hg-public/contrib
 sudo ln -s "$(pwd)/cgi-bin" /var/www/languagedepot.org_hg-public/cgi-bin
@@ -69,10 +71,14 @@ sudo a2ensite languagedepot_org_hg-public.conf
 sudo service apache2 reload
 ```
 
-To add a **VCS** Mecurial repository with `<Identifier>` for testing
+7. To add a **VCS** Mercurial repository with `<Identifier>` for testing
+    * The installed Mercurial may be too new to work with Chorus so use the Chorus `Mercurial.zip`.
 ```
 cd /var/vcs/public
-sudo hg clone http://hg-public.qa.languagedepot.org/<Identifier>
+sudo wget https://github.com/sillsdev/chorus/blob/master/lib/common/Mercurial-x86_64.zip?raw=true -O Mercurial.zip
+sudo unzip Mercurial.zip
+sudo chmod +x Mercurial/hg
+sudo Mercurial/hg clone http://hg-public.qa.languagedepot.org/<Identifier>
 sudo chown www-data:www-data -R /var/vcs/public
 ```
 
@@ -123,4 +129,3 @@ In the **src** folder: `composer install`
 ## Language Depot Stats ##
 
 Browse to [admin.languagedepot.org](http://admin.languagedepot.org/) to see reports.
-

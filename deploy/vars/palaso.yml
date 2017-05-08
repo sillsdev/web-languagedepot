@@ -2,6 +2,10 @@
 
 php_log_folder: /var/log/php
 repo_path: "{{local_dir.stdout | dirname | realpath}}"
+cache_path: /var/cache/hgresume
+vcs_path: /var/vcs/public
+resumable_document_root: /var/www/languagedepot.org_resumable/htdocs
+resumable_api_path: "{{resumable_document_root}}/api"
 
 apache_module_enable:
   - cgi
@@ -65,4 +69,27 @@ apache_vhosts:
 #            - 'PerlAuthenHandler Apache::Authn::RedminePublic::authen_handler'
 #            - 'PerlSetVar dsn "DBI:mysql:database=languagedepot;host=localhost"'
 #            - 'PerlSetVar db_user test'
-#            - 'PerlSetVar db_pass tset23'
+#            - 'PerlSetVar db_pass test'
+  - server_name: resumable.languagedepot.org
+    server_admin: webmaster@palaso.org
+    server_file_name: languagedepot_org_resumable
+    document_root: "{{resumable_document_root}}"
+    template: vhost_ssl.conf.j2
+#    template: vhost_perl_ssl.conf.j2
+    virtual_hosts:
+      - has_ssl: false
+        port: 80
+        server_alias:
+          - resumable.languagedepot.local
+#        extra:
+#          - "PerlRequire /var/www/languagedepot.org_resumable/htdocs/contrib/RedmineResumable.pm"
+#        auth_location:
+#          location: "/"
+#          auth_type: "Basic"
+#          auth_name: "Language Depot Repository (Resumable)"
+#          extra:
+#            - 'PerlAccessHandler Apache::Authn::RedmineResumable::access_handler'
+#            - 'PerlAuthenHandler Apache::Authn::RedmineResumable::authen_handler'
+#            - 'PerlSetVar dsn "DBI:mysql:database=languagedepot;host=localhost"'
+#            - 'PerlSetVar db_user test'
+#            - 'PerlSetVar db_pass test'
