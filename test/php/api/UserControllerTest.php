@@ -1,5 +1,6 @@
 <?php
 
+use Api\Models\User;
 use Api\UserController;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -302,5 +303,96 @@ class UserControllerTest extends PHPUnit_Framework_TestCase
         $result = json_decode($result);
 
         $this->assertEquals('Invalid email address', $result->error);
+    }
+
+    public function testUpdate_NonexistentUser_Error()
+    {
+        $controller = new UserController();
+        $nonexistentUsername = 'ran4domuser6543';
+        $request = new Request(array(),
+            array('login' => $nonexistentUsername),
+            array(), array(), array(), array(), array());
+
+        $response = $controller->update($request);
+        $result = $response->getContent();
+        $result = json_decode($result);
+
+        $this->assertEquals('Unknown user', $result->error);
+    }
+
+    public function testUpdate_ModifyUser_Ok() {
+        $client = ApiTestEnvironment::client();
+
+        $existentUsername = 'modify';
+        $response = $client->put(ApiTestEnvironment::url().'/api/users', array(
+            'headers' => ApiTestEnvironment::headers(),
+            'exceptions' => false,
+            'body' => array(
+                'login' => $existentUsername,
+                'firstname' => 'a',
+                'lastname' => 'b',
+                'mail' => 'amodify@example.net',
+                'language' => 'es')
+        ));
+
+        $this->assertEquals('200', $response->getStatusCode());
+        $result = $response->getBody();
+        $result = json_decode($result);
+
+        $expected0 = new \stdclass;
+        $expected0->login = $existentUsername;
+        $expected0->firstname = 'a';
+        $expected0->lastname = 'b';
+        $expected0->mail = 'amodify@example.net';
+        $expected0->language = 'es';
+
+        $this->assertEquals(array($expected0), $result);
+    }
+
+    public function testUpdate_MailExist_Error()
+    {
+        $controller = new UserController();
+        $existentUsername = 'modify';
+        $existentMail = 'test@example.net';
+        $request = new Request(array(),
+            array(
+                'login' => $existentUsername,
+                'mail' => $existentMail),
+            array(), array(), array(), array(), array());
+
+        $response = $controller->update($request);
+        $result = $response->getContent();
+        $result = json_decode($result);
+
+        $this->assertEquals('Email has already been taken', $result->error);
+    }
+
+    public function testUpdate_LimitAttributes_Ok()
+    {
+        $controller = new UserController();
+        $existentUsername = 'modify';
+        $invalidPassword = 'invalidPassword';
+        $request = new Request(array(),
+            array(
+                'login' => $existentUsername,
+                'hashed_password' => $invalidPassword,
+                'firstname' => 'newfirst',
+                'lastname' => 'newlast',
+                'mail' => 'newemail2@example.net',
+                'admin' => true,
+                'language' => 'th'),
+            array(), array(), array(), array(), array());
+
+        $response = $controller->update($request);
+        $expectedUser = User::findByLogin($existentUsername);
+
+        // Verify hashed_password and admin not changed
+        $this->assertEquals($expectedUser->login, $existentUsername);
+        $this->assertEquals($expectedUser->firstname, 'newfirst');
+        $this->assertEquals($expectedUser->lastname, 'newlast');
+        $this->assertNotEquals($expectedUser->hashed_password, $invalidPassword);
+        $this->assertEquals($expectedUser->mail, 'newemail2@example.net');
+        $this->assertEquals($expectedUser->admin, 0);
+        $this->assertEquals($expectedUser->language, 'th');
     }
 }
