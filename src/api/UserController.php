@@ -80,11 +80,12 @@ class UserController
     public function create(Request $request)
     {
         // Check for unique login and mail
-        $mail = $request->get('mail');
+        $mail = strtolower($request->get('mail'));
         $user = User::findByMail($mail);
         if ($user != null) {
             return new JsonResponse(array('error' => 'Email has already been taken'), 400);
         }
+
         $login = $mail;
         $user = User::findByLogin($login);
         if ($user != null) {

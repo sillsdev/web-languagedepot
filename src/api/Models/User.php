@@ -17,13 +17,18 @@ class User extends \ActiveRecord\Model
         return $hashedPassword == $this->hashed_password;
     }
 
+    /**
+     * Query for user by login
+     * @param $login
+     * @return \ActiveRecord\Model
+     */
     static public function findByLogin($login)
     {
         return self::first(array('conditions' => array('login = ?', $login)));
     }
 
     /**
-     * Query for user by lowercased email address
+     * Query for user by email address
      * @param $mail
      * @return \ActiveRecord\Model
      */
