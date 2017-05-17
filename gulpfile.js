@@ -15,7 +15,6 @@ var phpunit = require('gulp-phpunit');
 var protractor = require('gulp-protractor');
 var webdriverStandalone = require('gulp-protractor').webdriver_standalone;
 var webdriverUpdate = require('gulp-protractor').webdriver_update;
-var uglify = require('gulp-uglify');
 var concat = require('gulp-concat');
 var sourcemaps = require('gulp-sourcemaps');
 var path = require('path');

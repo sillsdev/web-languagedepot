@@ -736,7 +736,7 @@ DROP TABLE IF EXISTS `users`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `users` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `login` varchar(30) NOT NULL DEFAULT '',
   `hashed_password` varchar(40) NOT NULL DEFAULT '',
   `firstname` varchar(30) NOT NULL DEFAULT '',
@@ -764,7 +764,8 @@ INSERT INTO `users` (`id`, `login`, `hashed_password`, `firstname`, `lastname`, 
 (11, 'manager2', '5857a28060d630a5ed9e0bfd4e6e17a76fa41b79', 'Manager2', 'User', 'manager2@example.net', 0, 0, 1, '2009-07-23 08:44:48', 'en', NULL, '2009-07-22 06:32:07', '2009-07-23 08:45:37', NULL),
 (20, 'user1', '02484720fe235a6fa352ffa0d5dac80897008ec0', 'User', 'One', 'user1@example.net', 0, 0, 1, '2015-10-16 09:08:39', 'en', NULL, '2009-07-23 08:40:51', '2015-10-16 09:08:39', NULL),
 (21, 'user2', '3dd4ba95e5e68cd43d430a1a2d74a9ce75957be9', 'User', 'Two', 'user2@example.net', 0, 0, 1, '2015-10-16 09:08:39', 'en', NULL, '2009-07-23 08:40:51', '2015-10-16 09:08:39', NULL),
-(170, 'test', 'd8bebbafb32fbb0545773ce30dbcfb29e7573050', 'Test', 'Palaso', 'test@example.net', 0, 0, 1, '2015-10-16 09:08:39', 'en', NULL, '2010-09-09 03:29:15', '2012-08-30 09:49:02', NULL);
+(22, 'Upper', '721c93a8a9238620123d3bcfa670ce56', 'Upper', 'Case', 'UPPER@example.net', 0, 0, 1, '2015-10-21 09:08:39', 'en', NULL, '2015-10-16 09:08:39', '2015-10-16 09:08:39', NULL),
+(170, 'test', 'd8bebbafb32fbb0545773ce30dbcfb29e7573050', 'Test', 'Palaso', 'Test@example.net', 0, 0, 1, '2015-10-16 09:08:39', 'en', NULL, '2010-09-09 03:29:15', '2012-08-30 09:49:02', NULL);
 
 --
 -- Table structure for table `versions`

@@ -1,6 +1,9 @@
 <?php
 
+use Api\Models\User;
 //use PHPUnit_Framework_TestCase;
+
+TestEnvironment::ensureDatabaseConfigured();
 
 class UserTest extends PHPUnit_Framework_TestCase
 {
@@ -8,7 +11,7 @@ class UserTest extends PHPUnit_Framework_TestCase
     {
         $client = ApiTestEnvironment::client();
 
-        $response = $client->post(ApiTestEnvironment::url().'/api/user/bogus_user/projects', array(
+        $response = $client->post(ApiTestEnvironment::url().'/api/users/bogus_user/projects', array(
             'headers' => ApiTestEnvironment::headers(),
             'exceptions' => false
         ));
@@ -24,7 +27,7 @@ class UserTest extends PHPUnit_Framework_TestCase
     {
         $client = ApiTestEnvironment::client();
 
-        $response = $client->post(ApiTestEnvironment::url().'/api/user/test/projects', array(
+        $response = $client->post(ApiTestEnvironment::url().'/api/users/test/projects', array(
             'headers' => ApiTestEnvironment::headers(),
             'exceptions' => false,
             'body' => array(
@@ -43,7 +46,7 @@ class UserTest extends PHPUnit_Framework_TestCase
     {
         $client = ApiTestEnvironment::client();
 
-        $response = $client->post(ApiTestEnvironment::url().'/api/user/test/projects', array(
+        $response = $client->post(ApiTestEnvironment::url().'/api/users/test/projects', array(
             'headers' => ApiTestEnvironment::headers(),
             'exceptions' => false,
             'body' => array(
@@ -79,7 +82,7 @@ class UserTest extends PHPUnit_Framework_TestCase
     {
         $client = ApiTestEnvironment::client();
 
-        $response = $client->post(ApiTestEnvironment::url().'/api/user/test/projects', array(
+        $response = $client->post(ApiTestEnvironment::url().'/api/users/test/projects', array(
             'headers' => ApiTestEnvironment::headers(),
             'exceptions' => false,
             'body' => array(
@@ -102,33 +105,57 @@ class UserTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testUsernameIsAvailable_usernameDoesntExist_true() {
-        $client = ApiTestEnvironment::client();
-
+    public function testFindByLogin_UsernameDoesntExist_Null()
+    {
         $nonexistentUsername = 'ran4domuser6543';
-
-        $response = $client->get(ApiTestEnvironment::url().'/api/user/exists/' . $nonexistentUsername, array(
-            'headers' => ApiTestEnvironment::headers()
-        ));
-        $this->assertEquals('200', $response->getStatusCode());
-        $result = $response->getBody();
-        $result = json_decode($result);
-
-        $this->assertTrue($result == true);
+        $user = User::findByLogin($nonexistentUsername);
+        $this->assertNull($user);
     }
 
-    public function testUsernameIsAvailable_usernameExists_false() {
-        $client = ApiTestEnvironment::client();
+    public function testFindByLogin_UsernameExist_NotNull()
+    {
+        $existentUsername = 'test';
+        $user = User::findByLogin($existentUsername);
+        $this->assertNotNull($user);
 
-        $existingUsername = 'test';
+        // Check lowercase login
+        $existentUsername = 'tEst';
+        $user = User::findByLogin($existentUsername);
+        $this->assertNotNull($user);
+    }
 
-        $response = $client->get(ApiTestEnvironment::url().'/api/user/exists/' . $existingUsername, array(
-            'headers' => ApiTestEnvironment::headers()
-        ));
-        $this->assertEquals('200', $response->getStatusCode());
-        $result = $response->getBody();
-        $result = json_decode($result);
+    public function testFindByLogin_UsernameNull_Null()
+    {
+        $username = null;
+        $user = User::findByLogin($username);
 
-        $this->assertTrue($result == false);
+        $this->assertNull($user);
+    }
+
+    public function testFindByMail_MailDoesntExist_Null()
+    {
+        $nonexistentMail = 'nonexistent@example.com';
+        $user = User::findByMail($nonexistentMail);
+        $this->assertNull($user);
+    }
+
+    public function testFindByMail_MailExist_NotNull()
+    {
+        $existentMail = 'test@example.net';
+        $user = User::findByMail($existentMail);
+        $this->assertNotNull($user);
+
+        // Check lowercase mail
+        $existentMail = 'tEst@example.net';
+        $user = User::findByMail($existentMail);
+        $this->assertNotNull($user);
+    }
+
+    public function testFindByMail_MailNull_Null()
+    {
+        $mail = null;
+        $user = User::findByMail($mail);
+
+        $this->assertNull($user);
     }
 }

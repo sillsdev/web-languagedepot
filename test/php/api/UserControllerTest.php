@@ -27,7 +27,16 @@ class UserControllerTest extends PHPUnit_Framework_TestCase
         $result = json_decode($result);
 
         $this->assertTrue($result == false);
+    }
 
+    public function testUsernameIsAvailable_LowerUsernameExist_False() {
+        $existingUsername = 'tEst';
+        $controller = new UserController();
+
+        $result = $controller->usernameIsAvailable($existingUsername);
+        $result = json_decode($result);
+
+        $this->assertTrue($result == false);
     }
 
     public function testGetProjectAccess_UnknownUser_UserUnknown()
@@ -181,5 +190,117 @@ class UserControllerTest extends PHPUnit_Framework_TestCase
         $expected2->role = 'unknown';
 
         $this->assertEquals($result[2], $expected2);
+    }
+
+    /**
+     * Test new user can be created.  Also verifies email address is lowercased
+     */
+    public function testCreate_NewUser_Ok() {
+        $client = ApiTestEnvironment::client();
+
+        $nonexistentEmail = 'Newuser@example.com';
+
+        $response = $client->post(ApiTestEnvironment::url().'/api/users', array(
+            'headers' => ApiTestEnvironment::headers(),
+            'exceptions' => false,
+            'body' => array(
+                'plainPassword' => 'password',
+                'mail' => $nonexistentEmail)
+        ));
+
+        $this->assertEquals('200', $response->getStatusCode());
+        $result = $response->getBody();
+        $result = json_decode($result);
+
+        $expected0 = new \stdclass;
+        $expected0->mail = strtolower($nonexistentEmail);
+        $expected0->login = strtolower($nonexistentEmail);
+
+        $this->assertEquals(array($expected0), $result);
+    }
+
+    /**
+     * @depends testCreate_NewUser_Ok
+     */
+    public function testCreate_NewuserExist_Error()
+    {
+        $controller = new UserController();
+        $existingMail = 'newuser@example.com';
+        $request = new Request(array(),
+            array('mail' => $existingMail),
+            array(), array(), array(), array(), array());
+
+        $response = $controller->create($request);
+        $result = $response->getContent();
+        $result = json_decode($result);
+
+        $this->assertEquals( 'Email has already been taken', $result->error);
+    }
+
+    public function testCreate_LowercaseLoginExist_Error()
+    {
+        $controller = new UserController();
+        $existingLogin = 'Upper';
+        $request = new Request(array(),
+            array('mail' => $existingLogin),
+            array(), array(), array(), array(), array());
+
+        $response = $controller->create($request);
+        $result = $response->getContent();
+        $result = json_decode($result);
+
+        $this->assertEquals( 'Login has already been taken', $result->error);
+
+        $existingLogin = strtolower($existingLogin);
+        $request = new Request(array(),
+            array('mail' => $existingLogin),
+            array(), array(), array(), array(), array());
+
+        $response = $controller->create($request);
+        $result = $response->getContent();
+        $result = json_decode($result);
+
+        $this->assertEquals( 'Login has already been taken', $result->error);
+    }
+
+    public function testCreate_LowercaseMailExist_Error()
+    {
+        $controller = new UserController();
+        $existingMail = 'UPPER@example.net';
+        $request = new Request(array(),
+            array('mail' => $existingMail),
+            array(), array(), array(), array(), array());
+
+        $response = $controller->create($request);
+        $result = $response->getContent();
+        $result = json_decode($result);
+
+        $this->assertEquals( 'Email has already been taken', $result->error);
+
+        $existingMail = strtolower($existingMail);
+        $request = new Request(array(),
+            array('mail' => $existingMail),
+            array(), array(), array(), array(), array());
+
+        $response = $controller->create($request);
+        $result = $response->getContent();
+        $result = json_decode($result);
+
+        $this->assertEquals( 'Email has already been taken', $result->error);
+    }
+
+    public function testCreate_InvalidMail_Error()
+    {
+        $controller = new UserController();
+        $invalidMail = 'notanemailaddress';
+        $request = new Request(array(),
+            array('mail' => $invalidMail),
+            array(), array(), array(), array(), array());
+
+        $response = $controller->create($request);
+        $result = $response->getContent();
+        $result = json_decode($result);
+
+        $this->assertEquals('Invalid email address', $result->error);
     }
 }
