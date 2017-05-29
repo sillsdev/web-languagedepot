@@ -130,43 +130,40 @@ class UserController
         $login = $request->get('login');
         $mail = $request->get('mail');
         $user = User::findByLogin($login);
-        if ($user == null)
-        {
+        if ($user == null) {
             return new JsonResponse(array('error' => 'Unknown user'), 400);
         }
 
         // If mail is different, check that it is unique
-        if (($user->mail != $mail) && (User::findByMail($mail) != null))
-        {
+        if (($user->mail != $mail) && (User::findByMail($mail) != null)) {
             return new JsonResponse(array('error' => 'Email has already been taken'), 400);
         }
 
         // Define what attributes are allowed to be modified
+        $allowedAttributes = [
+            'firstname' => 1,
+            'lastname'  => 2,
+            'language'  => 3,
+            'mail'      => 4];
         $attributes = array_intersect_key(
             $request->request->all(),
-            array_flip([
-                'firstname',
-                'lastname',
-                'language',
-                'mail']));
-
-
+            $allowedAttributes);
         $user->update_attributes($attributes);
 
         $asArray = $user->to_array(array(
-                'only' => array(
-                    'login',
-                    'firstname',
-                    'lastname',
-                    'mail',
-                    'language')));
+            'only' => [
+                'login',
+                'firstname',
+                'lastname',
+                'mail',
+                'language']));
         $canEncode = json_encode($asArray);
         if ($canEncode === false) {
             // $fail[] = $asArray;
             throw new \Exception("Cannot encode to json");
-        } else {
-            $results[] = $asArray;
         }
+
+        $results[] = $asArray;
         return new JsonResponse($results, 200);
     }
 }
