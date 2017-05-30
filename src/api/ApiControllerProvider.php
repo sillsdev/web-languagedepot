@@ -25,6 +25,7 @@ class ApiControllerProvider implements ControllerProviderInterface
         $controllers->post('/users/{login}/projects', 'user.controller:getProjectsAccess');
         $controllers->get('/users/exists/{username}', 'user.controller:usernameIsAvailable');
         $controllers->post('/users', 'user.controller:create');
+        $controllers->put('/users', 'user.controller:update');
         return $controllers;
     }
 }

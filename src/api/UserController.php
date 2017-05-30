@@ -117,4 +117,53 @@ class UserController
         }
         return new JsonResponse($results, 200);
     }
+
+    /**
+     * Update existing user based on current login.
+     * Attributes user can update: firstname, lastname, mail, language
+     * @param Request $request
+     * @return JsonResponse On success, returns login and attributes
+     * @throws \Exception
+     */
+    public function update(Request $request)
+    {
+        $login = $request->get('login');
+        $mail = $request->get('mail');
+        $user = User::findByLogin($login);
+        if ($user == null) {
+            return new JsonResponse(array('error' => 'Unknown user'), 400);
+        }
+
+        // If mail is different, check that it is unique
+        if (($user->mail != $mail) && (User::findByMail($mail) != null)) {
+            return new JsonResponse(array('error' => 'Email has already been taken'), 400);
+        }
+
+        // Define what attributes are allowed to be modified
+        $allowedAttributes = [
+            'firstname' => 1,
+            'lastname'  => 2,
+            'language'  => 3,
+            'mail'      => 4];
+        $attributes = array_intersect_key(
+            $request->request->all(),
+            $allowedAttributes);
+        $user->update_attributes($attributes);
+
+        $asArray = $user->to_array(array(
+            'only' => [
+                'login',
+                'firstname',
+                'lastname',
+                'mail',
+                'language']));
+        $canEncode = json_encode($asArray);
+        if ($canEncode === false) {
+            // $fail[] = $asArray;
+            throw new \Exception("Cannot encode to json");
+        }
+
+        $results[] = $asArray;
+        return new JsonResponse($results, 200);
+    }
 }
