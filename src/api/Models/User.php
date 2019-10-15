@@ -12,6 +12,10 @@ class User extends \ActiveRecord\Model
     
     public function passwordCheck($plainPassword) {
         $hashedPassword = sha1($plainPassword);
+        $salt = $this->salt;
+        if (isset($salt)) {
+            $hashedPassword = sha1($salt . $hashedPassword);
+        }
         return $hashedPassword == $this->hashed_password;
     }
     
