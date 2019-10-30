@@ -9,7 +9,7 @@ require_once __DIR__ . '/vendor/autoload.php';
 require_once __DIR__ . '/Config.php';
 
 $app = new Silex\Application();
-$app['debug'] = true; // TODO Set to false for production
+$app['debug'] = false; // Set to true for development, false for production
 
 $app->register(new Silex\Provider\ServiceControllerServiceProvider());
 
@@ -39,7 +39,11 @@ $app->error(function (\Exception $e, $code) use ($app) {
     //     $app['monolog']->addError($e->getMessage());
     //     $app['monolog']->addError($e->getTraceAsString());
 
-    return new JsonResponse(array('statusCode' => $code, 'message' => $e->getMessage(), 'stacktrace' => $e->getTraceAsString()));
+    if ($app['debug']) {
+        return new JsonResponse(array('statusCode' => $code, 'message' => $e->getMessage(), 'stacktrace' => $e->getTraceAsString()));
+    } else {
+        return new JsonResponse(array('statusCode' => $code, 'message' => $e->getMessage()));
+    }
 });
 
 $app->mount('/api', new ApiControllerProvider());

@@ -41,8 +41,8 @@ class UserController
         }
         
         $projects = Project::find('all', array(
-            'joins' => array('members'),
-            'select' => 'projects.identifier,projects.name,members.user_id,members.role_id',
+            'joins' => ['members', 'LEFT JOIN member_roles ON member_roles.member_id = members.id'],
+            'select' => 'projects.identifier,projects.name,members.user_id,member_roles.role_id',
             'conditions' => $conditions
         ));
         $result = array();
