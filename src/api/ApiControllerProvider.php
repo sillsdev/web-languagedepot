@@ -22,8 +22,8 @@ class ApiControllerProvider implements ControllerProviderInterface
         $app['user.controller'] = $app->share(function() {
             return new UserController();
         });
-        $controllers->post('/users/{login}/projects', 'user.controller:getProjectsAccess');
-        $controllers->get('/users/exists/{username}', 'user.controller:usernameIsAvailable');
+        $controllers->post('/user/{login}/projects', 'user.controller:getProjectsAccess');
+        $controllers->get('/user/exists/{username}', 'user.controller:usernameIsAvailable');
         $controllers->post('/users', 'user.controller:create');
         $controllers->put('/users', 'user.controller:update');
         return $controllers;
