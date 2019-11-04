@@ -251,7 +251,7 @@ gulp.task('build-bower', function (cb) {
     cwd: './src'
   };
   execute(
-    'bower install',
+    '../node_modules/.bin/bower install',
     options,
     cb
   );
