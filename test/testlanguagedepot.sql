@@ -425,7 +425,6 @@ CREATE TABLE `members` (
   `id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL DEFAULT '0',
   `project_id` int(11) NOT NULL DEFAULT '0',
-  `role_id` int(11) NOT NULL DEFAULT '0',
   `created_on` datetime DEFAULT NULL,
   `mail_notification` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
@@ -435,18 +434,51 @@ CREATE TABLE `members` (
 -- Dumping data for table `members`
 --
 
-INSERT INTO `members` (`id`, `user_id`, `project_id`, `role_id`, `created_on`, `mail_notification`) VALUES
-(2, 10, 2, 3, '2009-07-27 02:03:33', 0),
-(3, 20, 2, 4, '2009-07-27 02:03:33', 0),
-(4, 170, 2, 4, '2017-01-02 03:04:55', 0),
-(5, 11, 3, 3, '2009-07-27 02:03:33', 0),
-(6, 21, 3, 4, '2009-07-27 02:03:33', 0),
-(7, 170, 3, 3, '2017-01-02 03-04:55', 0),
-(8, 170, 4, 6, '2017-02-02 04-04:55', 0);
+INSERT INTO `members` (`id`, `user_id`, `project_id`, `created_on`, `mail_notification`) VALUES
+(2, 10, 2, '2009-07-27 02:03:33', 0),
+(3, 20, 2, '2009-07-27 02:03:33', 0),
+(4, 170, 2, '2017-01-02 03:04:55', 0),
+(5, 11, 3, '2009-07-27 02:03:33', 0),
+(6, 21, 3, '2009-07-27 02:03:33', 0),
+(7, 170, 3, '2017-01-02 03-04:55', 0),
+(8, 170, 4, '2017-02-02 04-04:55', 0);
 
 --
 -- Table structure for table `messages`
 --
+
+
+DROP TABLE IF EXISTS `member_roles`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `member_roles` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `member_id` int(11) NOT NULL,
+  `role_id` int(11) NOT NULL,
+  `inherited_from` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `index_member_roles_on_member_id` (`member_id`),
+  KEY `index_member_roles_on_role_id` (`role_id`),
+  KEY `index_member_roles_on_inherited_from` (`inherited_from`)
+) ENGINE=InnoDB AUTO_INCREMENT=6624 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `member_roles`
+--
+
+LOCK TABLES `member_roles` WRITE;
+/*!40000 ALTER TABLE `member_roles` DISABLE KEYS */;
+INSERT INTO `member_roles` (`id`, `member_id`, `role_id`, `inherited_from`) VALUES
+(1, 2, 3, NULL),
+(2, 3, 4, NULL),
+(3, 4, 4, NULL),
+(4, 5, 3, NULL),
+(5, 6, 4, NULL),
+(6, 7, 3, NULL),
+(7, 8, 6, NULL);
+/*!40000 ALTER TABLE `member_roles` ENABLE KEYS */;
+UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `messages`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -739,6 +771,7 @@ CREATE TABLE `users` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `login` varchar(30) NOT NULL DEFAULT '',
   `hashed_password` varchar(40) NOT NULL DEFAULT '',
+  `salt` varchar(64) DEFAULT NULL,
   `firstname` varchar(30) NOT NULL DEFAULT '',
   `lastname` varchar(30) NOT NULL DEFAULT '',
   `mail` varchar(60) NOT NULL DEFAULT '',
@@ -758,15 +791,15 @@ CREATE TABLE `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `login`, `hashed_password`, `firstname`, `lastname`, `mail`, `mail_notification`, `admin`, `status`, `last_login_on`, `language`, `auth_source_id`, `created_on`, `updated_on`, `type`) VALUES
-(1, 'admin', '5857a28060d630a5ed9e0bfd4e6e17a76fa41b79', 'Admin', 'User', 'admin@example.net', 0, 1, 1, '2009-07-23 08:44:48', 'en', NULL, '2009-07-22 06:32:07', '2009-07-23 08:45:37', NULL),
-(10, 'manager1', 'bc852d2e71e76cf734e3a4b74619bc28d867c8bd', 'Manager1', 'User', 'manager1@example.net', 0, 0, 1, '2009-07-23 08:44:48', 'en', NULL, '2009-07-22 06:32:07', '2009-07-23 08:45:37', NULL),
-(11, 'manager2', '5857a28060d630a5ed9e0bfd4e6e17a76fa41b79', 'Manager2', 'User', 'manager2@example.net', 0, 0, 1, '2009-07-23 08:44:48', 'en', NULL, '2009-07-22 06:32:07', '2009-07-23 08:45:37', NULL),
-(20, 'user1', '02484720fe235a6fa352ffa0d5dac80897008ec0', 'User', 'One', 'user1@example.net', 0, 0, 1, '2015-10-16 09:08:39', 'en', NULL, '2009-07-23 08:40:51', '2015-10-16 09:08:39', NULL),
-(21, 'user2', '3dd4ba95e5e68cd43d430a1a2d74a9ce75957be9', 'User', 'Two', 'user2@example.net', 0, 0, 1, '2015-10-16 09:08:39', 'en', NULL, '2009-07-23 08:40:51', '2015-10-16 09:08:39', NULL),
-(22, 'Upper', '721c93a8a9238620123d3bcfa670ce56', 'Upper', 'Case', 'UPPER@example.net', 0, 0, 1, '2015-10-21 09:08:39', 'en', NULL, '2015-10-16 09:08:39', '2015-10-16 09:08:39', NULL),
-(30, 'modify', '9f37b795e5468cdf3e4a0a4a2d54698e056556e7', 'Modify', 'User', 'modify@example.net', 0, 0, 1, '2015-10-16 09:08:39', 'en', NULL, '2009-07-23 08:40:51', '2015-10-16 09:08:39', NULL),
-(170, 'test', 'd8bebbafb32fbb0545773ce30dbcfb29e7573050', 'Test', 'Palaso', 'Test@example.net', 0, 0, 1, '2015-10-16 09:08:39', 'en', NULL, '2010-09-09 03:29:15', '2012-08-30 09:49:02', NULL);
+INSERT INTO `users` (`id`, `login`, `hashed_password`, `salt`, `firstname`, `lastname`, `mail`, `mail_notification`, `admin`, `status`, `last_login_on`, `language`, `auth_source_id`, `created_on`, `updated_on`, `type`) VALUES
+(1, 'admin', '5857a28060d630a5ed9e0bfd4e6e17a76fa41b79', NULL, 'Admin', 'User', 'admin@example.net', 0, 1, 1, '2009-07-23 08:44:48', 'en', NULL, '2009-07-22 06:32:07', '2009-07-23 08:45:37', NULL),
+(10, 'manager1', 'bc852d2e71e76cf734e3a4b74619bc28d867c8bd', NULL, 'Manager1', 'User', 'manager1@example.net', 0, 0, 1, '2009-07-23 08:44:48', 'en', NULL, '2009-07-22 06:32:07', '2009-07-23 08:45:37', NULL),
+(11, 'manager2', '5857a28060d630a5ed9e0bfd4e6e17a76fa41b79', NULL, 'Manager2', 'User', 'manager2@example.net', 0, 0, 1, '2009-07-23 08:44:48', 'en', NULL, '2009-07-22 06:32:07', '2009-07-23 08:45:37', NULL),
+(20, 'user1', '02484720fe235a6fa352ffa0d5dac80897008ec0', NULL, 'User', 'One', 'user1@example.net', 0, 0, 1, '2015-10-16 09:08:39', 'en', NULL, '2009-07-23 08:40:51', '2015-10-16 09:08:39', NULL),
+(21, 'user2', '3dd4ba95e5e68cd43d430a1a2d74a9ce75957be9', NULL, 'User', 'Two', 'user2@example.net', 0, 0, 1, '2015-10-16 09:08:39', 'en', NULL, '2009-07-23 08:40:51', '2015-10-16 09:08:39', NULL),
+(22, 'Upper', '721c93a8a9238620123d3bcfa670ce56', 'Upper', NULL, 'Case', 'UPPER@example.net', 0, 0, 1, '2015-10-21 09:08:39', 'en', NULL, '2015-10-16 09:08:39', '2015-10-16 09:08:39', NULL),
+(30, 'modify', '9f37b795e5468cdf3e4a0a4a2d54698e056556e7', NULL, 'Modify', 'User', 'modify@example.net', 0, 0, 1, '2015-10-16 09:08:39', 'en', NULL, '2009-07-23 08:40:51', '2015-10-16 09:08:39', NULL),
+(170, 'test', 'd8bebbafb32fbb0545773ce30dbcfb29e7573050', NULL, 'Test', 'Palaso', 'Test@example.net', 0, 0, 1, '2015-10-16 09:08:39', 'en', NULL, '2010-09-09 03:29:15', '2012-08-30 09:49:02', NULL);
 
 --
 -- Table structure for table `versions`

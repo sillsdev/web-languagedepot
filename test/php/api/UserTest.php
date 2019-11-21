@@ -11,7 +11,7 @@ class UserTest extends PHPUnit_Framework_TestCase
     {
         $client = ApiTestEnvironment::client();
 
-        $response = $client->post(ApiTestEnvironment::url().'/api/users/bogus_user/projects', array(
+        $response = $client->post(ApiTestEnvironment::url().'/api/user/bogus_user/projects', array(
             'headers' => ApiTestEnvironment::headers(),
             'exceptions' => false
         ));
@@ -27,7 +27,7 @@ class UserTest extends PHPUnit_Framework_TestCase
     {
         $client = ApiTestEnvironment::client();
 
-        $response = $client->post(ApiTestEnvironment::url().'/api/users/test/projects', array(
+        $response = $client->post(ApiTestEnvironment::url().'/api/user/test/projects', array(
             'headers' => ApiTestEnvironment::headers(),
             'exceptions' => false,
             'body' => array(
@@ -46,7 +46,7 @@ class UserTest extends PHPUnit_Framework_TestCase
     {
         $client = ApiTestEnvironment::client();
 
-        $response = $client->post(ApiTestEnvironment::url().'/api/users/test/projects', array(
+        $response = $client->post(ApiTestEnvironment::url().'/api/user/test/projects', array(
             'headers' => ApiTestEnvironment::headers(),
             'exceptions' => false,
             'body' => array(
@@ -82,7 +82,7 @@ class UserTest extends PHPUnit_Framework_TestCase
     {
         $client = ApiTestEnvironment::client();
 
-        $response = $client->post(ApiTestEnvironment::url().'/api/users/test/projects', array(
+        $response = $client->post(ApiTestEnvironment::url().'/api/user/test/projects', array(
             'headers' => ApiTestEnvironment::headers(),
             'exceptions' => false,
             'body' => array(
