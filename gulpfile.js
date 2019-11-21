@@ -291,7 +291,7 @@ gulp.task('build-upload', function (cb) {
   };
 
   execute(
-    'rsync -progzlt --chmod=Dug=rwx,Fug=rw,Do=rx,Fo=r ' +
+    'rsync -progzl --chmod=Dug=rwx,Fug=rw,Do=rx,Fo=r ' +
     '--delete-during --stats <%= rsh %> ' +
     '--include-from="<%= includeFile %>" ' +
     '--exclude-from="<%= excludeFile %>" ' +
@@ -306,7 +306,7 @@ gulp.task('build-upload', function (cb) {
     options.dest = path.join(params.dest, '/test');
 
     execute(
-      'rsync -progzlt --chmod=Dug=rwx,Fug=rw,Do=rx,Fo=r ' +
+      'rsync -progzl --chmod=Dug=rwx,Fug=rw,Do=rx,Fo=r ' +
       '--delete-during --stats <%= rsh %> ' +
       '<%= src %> <%= dest %> --exclude php',
       options,
