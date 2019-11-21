@@ -279,23 +279,20 @@ gulp.task('build-upload', function (cb) {
     .option('dest', {
       demand: true,
       type: 'string' })
-    .option('uploadCredentials', {
-      demand: true,
-      type: 'string' })
     .argv;
   var options = {
     dryRun: false,
     silent: false,
     includeFile: 'upload-include.txt',  // read include patterns from FILE
     excludeFile: 'upload-exclude.txt',  // read exclude patterns from FILE
-    rsh: '--rsh="ssh -v -i ' + params.uploadCredentials + '"',
+    rsh: '--rsh="ssh -v"',  // Public key will be provided by ssh-agent
     src: 'src/',
     dest: path.join(params.dest, 'htdocs')
   };
 
   execute(
-    'rsync -progzlt --chmod=Dug=rwx,Fug=rw,o-rwx ' +
-    '--delete-during --stats --rsync-path="sudo rsync" <%= rsh %> ' +
+    'rsync -progzlt --chmod=Dug=rwx,Fug=rw,Do=rx,Fo=r ' +
+    '--delete-during --stats <%= rsh %> ' +
     '--include-from="<%= includeFile %>" ' +
     '--exclude-from="<%= excludeFile %>" ' +
     '<%= src %> <%= dest %>',
@@ -309,8 +306,8 @@ gulp.task('build-upload', function (cb) {
     options.dest = path.join(params.dest, '/test');
 
     execute(
-      'rsync -progzlt --chmod=Dug=rwx,Fug=rw,o-rwx ' +
-      '--delete-during --stats --rsync-path="sudo rsync" <%= rsh %> ' +
+      'rsync -progzlt --chmod=Dug=rwx,Fug=rw,Do=rx,Fo=r ' +
+      '--delete-during --stats <%= rsh %> ' +
       '<%= src %> <%= dest %> --exclude php',
       options,
       cb
