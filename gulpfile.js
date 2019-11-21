@@ -285,7 +285,7 @@ gulp.task('build-upload', function (cb) {
     silent: false,
     includeFile: 'upload-include.txt',  // read include patterns from FILE
     excludeFile: 'upload-exclude.txt',  // read exclude patterns from FILE
-    rsh: '--rsh="ssh -v"',  // Public key will be provided by ssh-agent
+    rsh: '--rsh="ssh -v -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no"',  // Public key will be provided by ssh-agent
     src: 'src/',
     dest: path.join(params.dest, 'htdocs')
   };
