@@ -154,6 +154,22 @@ sub is_lf_server {
     if ($client_ip eq "127.0.0.1") {
         return 1;
     }
+    if (defined $ENV{'LF_SERVER_TRUST_TOKEN'}) {
+      my $token = $ENV{'LF_SERVER_TRUST_TOKEN'};
+      my $query = $resource->args();
+      if ($query) {
+        foreach $arg (split(/&/, $query)) {
+          my ($key, $value) = split(/=/, $arg);
+          if ($key eq "trust_token") {
+            # Faster than uri_unescape(), see https://metacpan.org/pod/URI::Escape#uri_unescape($string,...)
+            $value =~ s/%([0-9A-Fa-f]{2})/chr(hex($1))/eg;
+            if ($value eq $token) {
+              return 1;
+            }
+          }
+        }
+      }
+    }
     return 0;
 }
 
