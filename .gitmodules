@@ -4,5 +4,5 @@
 	branch = master
 [submodule "deploy/roles/apache_config"]
 	path = deploy/roles/apache_config
-	url = https://github.com/saygoweb/ansible-role-apache.git
+	url = https://github.com/sillsdev/ansible-role-apache.git
 	branch = master-our
